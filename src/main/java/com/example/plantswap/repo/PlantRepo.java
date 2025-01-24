@@ -1,4 +1,7 @@
-package repo;
+package com.example.plantswap.repo;
 
-public interface PlantRepo {
+import com.example.plantswap.models.Plant;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface PlantRepo extends MongoRepository<Plant, String> {
 }
