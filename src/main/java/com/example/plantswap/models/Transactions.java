@@ -1,4 +1,4 @@
 package com.example.plantswap.models;
 
-public class User {
+public class Transactions {
 }

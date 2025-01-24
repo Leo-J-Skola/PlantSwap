@@ -1,4 +1,4 @@
 package com.example.plantswap.controllers;
 
-public class UserController {
+public class UsersController {
 }
