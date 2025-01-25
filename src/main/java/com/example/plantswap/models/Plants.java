@@ -13,7 +13,7 @@ public class Plants {
     private String id;
     private String name;
     private String scientificName;
-    private int age;
+    private double age;
     private String type;
     private String lightReq;
     private String waterReq;
@@ -48,11 +48,11 @@ public class Plants {
         this.scientificName = scientificName;
     }
 
-    public int getAge() {
+    public double getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(double age) {
         this.age = age;
     }
 
