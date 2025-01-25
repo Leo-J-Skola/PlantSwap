@@ -2,6 +2,7 @@ package com.example.plantswap.controllers;
 
 import com.example.plantswap.repo.PlantsRepo;
 import com.example.plantswap.models.Plants;
+import com.example.plantswap.services.PlantServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,30 +17,59 @@ import java.util.List;
 public class PlantsController {
 
     @Autowired
-    private PlantsRepo plantsRepo;
+    private PlantServices plantServices;
 
     @PostMapping
     public ResponseEntity<Plants> createPlant(@RequestBody Plants plant) {
-        Plants savedPlant = plantsRepo.save(plant);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedPlant);
+        Plants createdPlant = plantServices.createPlant(plant);
+        return new ResponseEntity<>(createdPlant, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<Plants>> getAllPlants() {
-        List<Plants> plants = plantsRepo.findAll();
-        return ResponseEntity.ok(plants);
+        List<Plants> plant = plantServices.getAllPlants();
+        return new ResponseEntity<>(plant, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Plants> getPlantById(@PathVariable String id) {
-        Plants plant = plantsRepo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found"));
-        return ResponseEntity.ok(plant);
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<Plants>> getPlantByName(@PathVariable String name) {
+        List<Plants> plant = plantServices.getPlantByName(name);
+        return new ResponseEntity<>(plant, HttpStatus.OK);
+    }
+
+    @GetMapping("/difficulty/{difficulty}")
+    public ResponseEntity<List<Plants>> getPlantByDifficulty(@PathVariable int difficulty) {
+        List<Plants> plant = plantServices.getPlantByDifficulty(difficulty);
+        return new ResponseEntity<>(plant, HttpStatus.OK);
+    }
+
+    @GetMapping("/age/{age}")
+    public ResponseEntity<List<Plants>> getPlantByAge(@PathVariable double age) {
+        List<Plants> plant = plantServices.getPlantByAge(age);
+        return new ResponseEntity<>(plant, HttpStatus.OK);
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Plants>> getPlantByStatus(@PathVariable String status) {
+        List<Plants> plant = plantServices.getPlantByStatus(status);
+        return new ResponseEntity<>(plant, HttpStatus.OK);
+    }
+
+    @GetMapping("/price")
+    public ResponseEntity<List<Plants>> getPlantByPriceRange(@RequestParam int minPrice, @RequestParam int maxPrice) {
+        List<Plants> plant = plantServices.getPlantByPriceRange(minPrice, maxPrice);
+        return new ResponseEntity<>(plant, HttpStatus.OK);
+    }
+
+/*    @GetMapping("/status")
+    public ResponseEntity<List<Plants>> getStatusPlants(@RequestParam String status) {
+        List<Plants> plant = plantServices.getAllPlantsStatus();
+        return new ResponseEntity<>(plant, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Plants> updatePlant(@PathVariable String id, @RequestBody Plants plant) {
-        Plants existingPlant = plantsRepo.findById(id)
+        Plants existingPlant = plantServices.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found."));
 
         if (plant.getName() != null) {
@@ -101,7 +131,7 @@ public class PlantsController {
         }
         plantsRepo.deleteById(id);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 
 }
 

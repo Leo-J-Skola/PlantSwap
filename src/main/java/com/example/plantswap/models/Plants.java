@@ -24,6 +24,8 @@ public class Plants {
     private String status; //Checks if the plant is available
     private String ownerId; //Person that owns the plant
 
+
+
     public String getId() {
         return id;
     }
