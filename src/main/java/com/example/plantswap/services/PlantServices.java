@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.plantswap.models.Plants;
 import com.example.plantswap.repo.PlantsRepo;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -31,6 +32,31 @@ public class PlantServices {
         plantsRepo.delete(plant);
     }
 
+    public Plants updatePlant(Plants plant) {
+        validatePlant(plant);
+        updateExistingPlant(plant);
+        return plantsRepo.save(plant);
+    }
+
+    //Currently this forces me to update ALL of these at once.
+    //I need to fix this later if i want to, for example just change the difficulty.
+
+    private void updateExistingPlant(Plants plant) {
+        plant.setName(plant.getName());
+        plant.setPrice(plant.getPrice());
+        plant.setDifficulty(plant.getDifficulty());
+        plant.setScientificName(plant.getScientificName());
+        plant.setType(plant.getType());
+        plant.setLightReq(plant.getLightReq());
+        plant.setWaterReq(plant.getWaterReq());
+        plant.setStatus(plant.getStatus());
+        plant.setTradeOrSell(plant.getTradeOrSell());
+        plant.setOwnerId(plant.getOwnerId());
+        plant.setImages(plant.getImages());
+        plant.setAge(plant.getAge());
+    }
+
+
     public List<Plants> getAllPlants() {
         return plantsRepo.findAll();
     }
@@ -45,7 +71,6 @@ public class PlantServices {
         }
         return plants;
     }
-
 
     public List<Plants> getPlantByName(String name) {
         if (name == null || name.trim().isEmpty()) {
@@ -94,11 +119,12 @@ public class PlantServices {
     }
 
 
-//This makes sure a user cannot update or create a plant with invalid information.
 
+//This makes sure a user cannot update or create a plant with invalid information.
         private void validatePlant(Plants plant) {
             if (plant.getName() == null || plant.getName().trim().isEmpty()) {
                 throw new IllegalArgumentException("Plant name can not be empty or null.");
+
             }
 
             if (plant.getPrice() < 50 || plant.getPrice() > 1000) {
@@ -126,8 +152,9 @@ public class PlantServices {
                 throw new IllegalArgumentException("Difficulty must be between 1 and 5.");
             }
         }
+    }
 
-}
+
 
 
 

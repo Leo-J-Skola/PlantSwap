@@ -34,6 +34,12 @@ public class PlantsController {
                                                                 // fixing the jakarta.validation libraries to make custom error messages
     }
 
+    @PutMapping ("/id/{id}")
+    public ResponseEntity<Plants> updatePlant(@RequestBody Plants id) {
+        Plants updatedPlant = plantServices.updatePlant(id);
+        return new ResponseEntity<>(updatedPlant, HttpStatus.ACCEPTED);
+    }
+
     @GetMapping
     public ResponseEntity<List<Plants>> getAllPlants() {
         List<Plants> plant = plantServices.getAllPlants();
