@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/plants")
@@ -25,34 +26,48 @@ public class PlantsController {
         return new ResponseEntity<>(createdPlant, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<Plants> deletePlant(@PathVariable Plants id) {
+        plantServices.deletePlant(id);
+        return new ResponseEntity<>(HttpStatus.RESET_CONTENT);  //I found some more fitting error codes from the HttpStatus.class
+                                                                // since i didnt want to spend too much time
+                                                                // fixing the jakarta.validation libraries to make custom error messages
+    }
+
     @GetMapping
     public ResponseEntity<List<Plants>> getAllPlants() {
         List<Plants> plant = plantServices.getAllPlants();
-        return new ResponseEntity<>(plant, HttpStatus.OK);
+        return new ResponseEntity<>(plant, HttpStatus.FOUND);
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Optional<Plants>> getPlantById(@PathVariable String id) {
+        Optional<Plants> plant = plantServices.getPlantById(id);
+        return new ResponseEntity<>(plant, HttpStatus.FOUND);
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<List<Plants>> getPlantByName(@PathVariable String name) {
         List<Plants> plant = plantServices.getPlantByName(name);
-        return new ResponseEntity<>(plant, HttpStatus.OK);
+        return new ResponseEntity<>(plant, HttpStatus.FOUND);
     }
 
     @GetMapping("/difficulty/{difficulty}")
     public ResponseEntity<List<Plants>> getPlantByDifficulty(@PathVariable int difficulty) {
         List<Plants> plant = plantServices.getPlantByDifficulty(difficulty);
-        return new ResponseEntity<>(plant, HttpStatus.OK);
+        return new ResponseEntity<>(plant, HttpStatus.FOUND);
     }
 
     @GetMapping("/age/{age}")
     public ResponseEntity<List<Plants>> getPlantByAge(@PathVariable double age) {
         List<Plants> plant = plantServices.getPlantByAge(age);
-        return new ResponseEntity<>(plant, HttpStatus.OK);
+        return new ResponseEntity<>(plant, HttpStatus.FOUND);
     }
 
     @GetMapping("/status/{status}")
     public ResponseEntity<List<Plants>> getPlantByStatus(@PathVariable String status) {
         List<Plants> plant = plantServices.getPlantByStatus(status);
-        return new ResponseEntity<>(plant, HttpStatus.OK);
+        return new ResponseEntity<>(plant, HttpStatus.FOUND);
     }
 
     @GetMapping("/price")
@@ -60,7 +75,6 @@ public class PlantsController {
         List<Plants> plant = plantServices.getPlantByPriceRange(minPrice, maxPrice);
         return new ResponseEntity<>(plant, HttpStatus.OK);
     }
-
 /*    @GetMapping("/status")
     public ResponseEntity<List<Plants>> getStatusPlants(@RequestParam String status) {
         List<Plants> plant = plantServices.getAllPlantsStatus();
@@ -123,14 +137,6 @@ public class PlantsController {
 
         Plants updatedPlant = plantsRepo.save(existingPlant);
         return ResponseEntity.ok(updatedPlant);
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlant(@PathVariable String id) {
-        if(!plantsRepo.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found");
-        }
-        plantsRepo.deleteById(id);
-        return ResponseEntity.noContent().build();
     }*/
 
 }

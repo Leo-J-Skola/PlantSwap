@@ -8,7 +8,6 @@ import java.util.List;
 
 @Document(collection = "plants")
 public class Plants {
-
     @Id
     private String id;
     private String name;
@@ -24,7 +23,8 @@ public class Plants {
     private String status; //Checks if the plant is available
     private String ownerId; //Person that owns the plant
 
-
+    public Plants() {
+    }
 
     public String getId() {
         return id;

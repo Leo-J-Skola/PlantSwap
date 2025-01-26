@@ -1,6 +1,8 @@
 package com.example.plantswap.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.plantswap.models.Plants;
 import com.example.plantswap.repo.PlantsRepo;
@@ -8,6 +10,7 @@ import com.example.plantswap.repo.PlantsRepo;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PlantServices {
@@ -21,9 +24,28 @@ public class PlantServices {
         return plantsRepo.save(plant);
     }
 
+    public void deletePlant(Plants plant) {
+        if (Objects.isNull(plant)) {
+            throw new IllegalArgumentException("Plant cannot be null.");
+        }
+        plantsRepo.delete(plant);
+    }
+
     public List<Plants> getAllPlants() {
         return plantsRepo.findAll();
     }
+
+    public Optional<Plants> getPlantById(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Plant id can not be empty or null.");
+        }
+        Optional<Plants> plants = plantsRepo.findById(id);
+        if (plants.isEmpty()) {
+            throw new NoSuchElementException("No plant found with id '" + id + "'.");
+        }
+        return plants;
+    }
+
 
     public List<Plants> getPlantByName(String name) {
         if (name == null || name.trim().isEmpty()) {
@@ -72,7 +94,7 @@ public class PlantServices {
     }
 
 
-
+//This makes sure a user cannot update or create a plant with invalid information.
 
         private void validatePlant(Plants plant) {
             if (plant.getName() == null || plant.getName().trim().isEmpty()) {
@@ -104,6 +126,7 @@ public class PlantServices {
                 throw new IllegalArgumentException("Difficulty must be between 1 and 5.");
             }
         }
+
 }
 
 
