@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
+import org.springframework.data.annotation.Id;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public class PlantsController {
         return new ResponseEntity<>(createdPlant, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Plants> deletePlant(@PathVariable Plants id) {
         plantServices.deletePlant(id);
         return new ResponseEntity<>(HttpStatus.RESET_CONTENT);  //I found some more fitting error codes from the HttpStatus.class
@@ -34,7 +34,7 @@ public class PlantsController {
                                                                 // fixing the jakarta.validation libraries to make custom error messages
     }
 
-    @PutMapping ("/id/{id}")
+    @PutMapping ("/{id}")
     public ResponseEntity<Plants> updatePlant(@RequestBody Plants id) {
         Plants updatedPlant = plantServices.updatePlant(id);
         return new ResponseEntity<>(updatedPlant, HttpStatus.ACCEPTED);
@@ -51,99 +51,6 @@ public class PlantsController {
         Optional<Plants> plant = plantServices.getPlantById(id);
         return new ResponseEntity<>(plant, HttpStatus.FOUND);
     }
-
-    @GetMapping("/name/{name}")
-    public ResponseEntity<List<Plants>> getPlantByName(@PathVariable String name) {
-        List<Plants> plant = plantServices.getPlantByName(name);
-        return new ResponseEntity<>(plant, HttpStatus.FOUND);
-    }
-
-    @GetMapping("/difficulty/{difficulty}")
-    public ResponseEntity<List<Plants>> getPlantByDifficulty(@PathVariable int difficulty) {
-        List<Plants> plant = plantServices.getPlantByDifficulty(difficulty);
-        return new ResponseEntity<>(plant, HttpStatus.FOUND);
-    }
-
-    @GetMapping("/age/{age}")
-    public ResponseEntity<List<Plants>> getPlantByAge(@PathVariable double age) {
-        List<Plants> plant = plantServices.getPlantByAge(age);
-        return new ResponseEntity<>(plant, HttpStatus.FOUND);
-    }
-
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<Plants>> getPlantByStatus(@PathVariable String status) {
-        List<Plants> plant = plantServices.getPlantByStatus(status);
-        return new ResponseEntity<>(plant, HttpStatus.FOUND);
-    }
-
-    @GetMapping("/price")
-    public ResponseEntity<List<Plants>> getPlantByPriceRange(@RequestParam int minPrice, @RequestParam int maxPrice) {
-        List<Plants> plant = plantServices.getPlantByPriceRange(minPrice, maxPrice);
-        return new ResponseEntity<>(plant, HttpStatus.OK);
-    }
-/*    @GetMapping("/status")
-    public ResponseEntity<List<Plants>> getStatusPlants(@RequestParam String status) {
-        List<Plants> plant = plantServices.getAllPlantsStatus();
-        return new ResponseEntity<>(plant, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Plants> updatePlant(@PathVariable String id, @RequestBody Plants plant) {
-        Plants existingPlant = plantServices.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found."));
-
-        if (plant.getName() != null) {
-            existingPlant.setName(plant.getName());
-        }
-
-        if (plant.getScientificName() != null) {
-            existingPlant.setScientificName(plant.getScientificName());
-        }
-
-        if (plant.getAge() != 0) {
-            existingPlant.setAge(plant.getAge());
-        }
-
-        if (plant.getType() != null) {
-            existingPlant.setType(plant.getType());
-        }
-
-        if (plant.getLightReq() != null) {
-            existingPlant.setLightReq(plant.getLightReq());
-        }
-
-        if (plant.getWaterReq() != null) {
-            existingPlant.setWaterReq(plant.getWaterReq());
-        }
-
-        if (plant.getDifficulty() != 0) {
-            existingPlant.setDifficulty(plant.getDifficulty());
-        }
-
-        if (plant.getTradeOrSell() != null) {
-            existingPlant.setTradeOrSell(plant.getTradeOrSell());
-        }
-
-        if (plant.getPrice() != 0) {
-            existingPlant.setPrice(plant.getPrice());
-        }
-
-        if (plant.getImages() != null) {
-            existingPlant.setImages(plant.getImages());
-        }
-
-        if (plant.getStatus() != null) {
-            existingPlant.setStatus(plant.getStatus());
-        }
-
-        if (plant.getOwnerId() != null) {
-            existingPlant.setOwnerId(plant.getOwnerId());
-
-        }
-
-        Plants updatedPlant = plantsRepo.save(existingPlant);
-        return ResponseEntity.ok(updatedPlant);
-    }*/
 
 }
 

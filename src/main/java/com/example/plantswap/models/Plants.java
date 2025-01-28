@@ -1,15 +1,16 @@
 package com.example.plantswap.models;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Document(collection = "plants")
 public class Plants {
     @Id
-    private String id;
+    private ObjectId id;
     private String name;
     private String scientificName;
     private double age;
@@ -21,16 +22,16 @@ public class Plants {
     private int price;
     private List<String> images;
     private String status; //Checks if the plant is available
-    private String ownerId; //Person that owns the plant
+    private ObjectId ownerId; //Person that owns the plant
 
     public Plants() {
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -90,43 +91,11 @@ public class Plants {
         this.difficulty = difficulty;
     }
 
-    public String getTradeOrSell() {
-        return tradeOrSell;
-    }
-
-    public void setTradeOrSell(String tradeOrSell) {
-        this.tradeOrSell = tradeOrSell;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     public List<String> getImages() {
         return images;
     }
 
     public void setImages(List<String> images) {
         this.images = images;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
     }
 }
