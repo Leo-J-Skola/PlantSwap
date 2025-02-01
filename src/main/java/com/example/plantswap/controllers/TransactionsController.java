@@ -30,34 +30,32 @@ public class TransactionsController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<Optional<Transactions>> getTransactionsByUserId(@PathVariable String userId) {
-        Optional<Transactions> getTransactionsByUserId = transactionServices.getTransactionsByUserId(userId);
-        return new ResponseEntity<>(getTransactionsByUserId, HttpStatus.FOUND);
+        Optional<Transactions> transaction = transactionServices.getTransactionsByUserId(userId);
+        return new ResponseEntity<>(transaction, HttpStatus.FOUND);
     }
 
     @GetMapping
     public ResponseEntity<List<Transactions>> getAllTransactions() {
-        List<Transactions> transactions = transactionServices.getAllTransactions();
-        return new ResponseEntity<>(transactions, HttpStatus.FOUND);
+        List<Transactions> user = transactionServices.getAllTransactions();
+        return new ResponseEntity<>(user, HttpStatus.FOUND);
     }
 
         @PostMapping("/trade/{userId}/{plantId}")
         public ResponseEntity<Transactions> createTradeTransaction(String transactionId, @PathVariable String userId, @PathVariable String plantId) {
-            Transactions createTradeTransaction = new Transactions(transactionId, userId, plantId);
-            transactionsRepo.save(createTradeTransaction);
-            return ResponseEntity.ok(createTradeTransaction);
+            Transactions transaction = new Transactions(transactionId, userId, plantId);
+            transactionsRepo.save(transaction);
+            return ResponseEntity.ok(transaction);
         }
 
         @GetMapping("/trades")
         public ResponseEntity<Optional<Transactions>> getTradeTransactions() {
-            Optional<Transactions> trades = transactionServices.getTradeTransactions(("trade"));
-            return ResponseEntity.ok(trades);
+            Optional<Transactions> trades = transactionsRepo.findByTransactionType("trade");
+            if (!trades.isEmpty()) {
+                return ResponseEntity.ok(trades);
+            } else {
+                return ResponseEntity.notFound().build();
         }
-
-    @GetMapping("/sells")
-    public ResponseEntity<Optional<Transactions>> getSellTransactions() {
-        Optional<Transactions> sells = transactionServices.getSellTransactions(("sell"));
-        return ResponseEntity.ok(sells);
+        }
     }
-}
 
 
