@@ -58,18 +58,6 @@ public class TransactionsController {
         Optional<Transactions> sells = transactionServices.getSellTransactions(("sell"));
         return ResponseEntity.ok(sells);
     }
-
-/*        @PostMapping("/trade/{transactionId}/offer/{userId}/{tradeOffers}")
-        public ResponseEntity<String> makeTradeOffer(@PathVariable String transactionId, @PathVariable String userId, @PathVariable String tradeOffers) {
-            Optional<Transactions> existingTransaction = transactionsRepo.findById(transactionId);
-            if (existingTransaction.isPresent()) {
-                Transactions transaction = existingTransaction.get();
-                transaction.addTradeOffer(userId, tradeOffers);
-                transactionsRepo.save(transaction);
-                return ResponseEntity.ok("You sent a trade offer.");
-            }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unable to find transaction to trade.");
-        }*/
-    }
+}
 
 
