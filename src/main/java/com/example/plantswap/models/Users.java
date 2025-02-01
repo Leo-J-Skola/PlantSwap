@@ -1,9 +1,8 @@
 package com.example.plantswap.models;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.annotation.Id;
+
 import java.util.List;
 
 @Document(collection = "users")
@@ -11,7 +10,7 @@ public class Users {
     @Id
     private String id;
     private String name;
-    private List<String> transactionIds;
+    private List<String> transactionId;
     private List<Users> plantId; //the plants the user owns
 
     public String getId() {
@@ -34,11 +33,11 @@ public class Users {
     public void setPlantId(List<Users> plantId) {
         this.plantId = plantId;
     }
-    public List<String> getTransactionIds() {
-        return transactionIds;
+    public List<String> getTransactionId() {
+        return transactionId;
     }
-    public void setTransactionIds(List<String> transactionIds) {
-        this.transactionIds = transactionIds;
+    public void setTransactionId(List<String> transactionId) {
+        this.transactionId = transactionId;
     }
 
 }

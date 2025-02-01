@@ -10,7 +10,7 @@ import java.util.List;
 @Document(collection = "plants")
 public class Plants {
     @Id
-    private ObjectId id;
+    public static String id;
     private String name;
     private String scientificName;
     private double age;
@@ -22,17 +22,17 @@ public class Plants {
     private int price;
     private List<String> images;
     private String status; //Checks if the plant is available
-    private ObjectId ownerId; //Person that owns the plant
+    private String ownerId; //Person that owns the plant
 
     public Plants() {
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
+    public void setId(String id) {
+        Plants.id = id;
     }
 
     public String getName() {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.plantswap.models.Plants;
 import com.example.plantswap.repo.PlantsRepo;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.data.annotation.Id;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -85,8 +85,8 @@ public class UserServices {
             user.setPlantId(null);
         }
 
-        if (user.getTransactionIds() == null || user.getTransactionIds().isEmpty()) {
-            user.setTransactionIds(null);
+        if (user.getTransactionId() == null || user.getTransactionId().isEmpty()) {
+            user.setTransactionId(null);
         }
     }
 

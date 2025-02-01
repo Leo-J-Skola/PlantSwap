@@ -1,10 +1,14 @@
 package com.example.plantswap.services;
 
+import com.example.plantswap.models.Plants;
 import com.example.plantswap.models.Transactions;
+import com.example.plantswap.repo.PlantsRepo;
 import com.example.plantswap.repo.TransactionsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.annotation.Id;
+import org.springframework.transaction.TransactionSuspensionNotSupportedException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +17,8 @@ public class TransactionServices {
 
     @Autowired
     private TransactionsRepo transactionsRepo;
+    @Autowired
+    private PlantsRepo plantsRepo;
 
     public Transactions createTransaction(Transactions transaction) {
 /*        validateTransaction(transaction);*/
@@ -31,6 +37,13 @@ public class TransactionServices {
         return transactionsRepo.findByUserId(id);
     }
 
+    public Optional<Transactions> getTradeTransactions(String id) {
+        return transactionsRepo.findByTransactionType("trade");
+    }
+
+    public Optional<Transactions> getSellTransactions(String id) {
+        return transactionsRepo.findByTransactionType("sell");
+    }
 
     public Transactions createSellTransaction(Transactions transaction, String userId, String plantId, int price, Object o, Object o1) {
         if (transaction.getId() == null) {
@@ -45,10 +58,9 @@ public class TransactionServices {
         return transaction;
     }
 
-    public Transactions createTradeTransaction(Transactions transaction ) {
+    public Transactions createTradeTransaction(Transactions transaction) {
         if (transaction.getId() == null) {
-            throw new IllegalArgumentException("The plant id can not be empty or null.");
-
+            throw new IllegalArgumentException("The id can not be empty or null.");
         }
         return transaction;
     }

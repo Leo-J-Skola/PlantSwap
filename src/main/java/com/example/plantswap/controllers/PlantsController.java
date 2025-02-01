@@ -29,9 +29,7 @@ public class PlantsController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Plants> deletePlant(@PathVariable Plants id) {
         plantServices.deletePlant(id);
-        return new ResponseEntity<>(HttpStatus.RESET_CONTENT);  //I found some more fitting error codes from the HttpStatus.class
-                                                                // since i didnt want to spend too much time
-                                                                // fixing the jakarta.validation libraries to make custom error messages
+        return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     }
 
     @PutMapping ("/{id}")

@@ -1,8 +1,8 @@
 package com.example.plantswap.controllers;
 
 import com.example.plantswap.models.Transactions;
-import com.example.plantswap.models.Users;
 
+import com.example.plantswap.models.Users;
 import com.example.plantswap.repo.TransactionsRepo;
 import com.example.plantswap.services.TransactionServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ public class TransactionsController {
 
     @Autowired
     private TransactionServices transactionServices;
+    private TransactionsRepo transactionsRepo;
 
     @PostMapping("/trade")
     public ResponseEntity<Transactions> tradeTransaction(@RequestBody Transactions transaction) {
@@ -26,13 +27,6 @@ public class TransactionsController {
         return new ResponseEntity<>(createdTradeTransaction, HttpStatus.CREATED);
     }
 
-    
-
-    @PostMapping("/sell/{userId}/{plantId}/{price}")
-    public ResponseEntity<Transactions> sellTransaction(@RequestBody Transactions transaction, @PathVariable String userId, @PathVariable String plantId, @PathVariable int price) {
-        Transactions createdSellTransaction = transactionServices.createSellTransaction(transaction, userId, plantId, price, null, null);
-        return new ResponseEntity<>(createdSellTransaction, HttpStatus.CREATED);
-    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<Optional<Transactions>> getTransactionsByUserId(@PathVariable String userId) {
@@ -42,8 +36,26 @@ public class TransactionsController {
 
     @GetMapping
     public ResponseEntity<List<Transactions>> getAllTransactions() {
-        List<Transactions> transaction = transactionServices.getAllTransactions();
-        return new ResponseEntity<>(transaction, HttpStatus.FOUND);
+        List<Transactions> user = transactionServices.getAllTransactions();
+        return new ResponseEntity<>(user, HttpStatus.FOUND);
     }
 
-}
+        @PostMapping("/trade/{userId}/{plantId}")
+        public ResponseEntity<Transactions> createTradeTransaction(String transactionId, @PathVariable String userId, @PathVariable String plantId) {
+            Transactions transaction = new Transactions(transactionId, userId, plantId);
+            transactionsRepo.save(transaction);
+            return ResponseEntity.ok(transaction);
+        }
+
+        @GetMapping("/trades")
+        public ResponseEntity<Optional<Transactions>> getTradeTransactions() {
+            Optional<Transactions> trades = transactionsRepo.findByTransactionType("trade");
+            if (!trades.isEmpty()) {
+                return ResponseEntity.ok(trades);
+            } else {
+                return ResponseEntity.notFound().build();
+        }
+        }
+    }
+
+

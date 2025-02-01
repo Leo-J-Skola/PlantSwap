@@ -1,27 +1,35 @@
 package com.example.plantswap.models;
 
-import org.bson.types.ObjectId;
+import jakarta.validation.constraints.Max;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.annotation.Id;
-import java.util.Optional;
+
 
 @Document(collection = "transactions")
 public class Transactions {
+    @Max(value=10, message = "The price can not be more than 10.")
     @Id
     private String id;
     private int price;
 
-    private String trade;
-    private String sell;
-
+    private String transactionType;
+    private String transactionId;
     private String userId;
-
+    private boolean available;
+    private String offeredPlantId; //This is the plantId being offered for the user that made the transaction listing
     private String plantId;
+
     private String buyerId;
 
-    private String trade_offer; //This is the plantId being offered for the user that made the transaction listing
+    private String trade_offer;
     private String trade_status; //accept,decline or pending (pending meaning a trade offer has been made and is waiting to be accepted or declined)
+
+    public Transactions(String transactionId, String userId, String plantId) {
+        this.transactionId = transactionId;
+        this.userId = userId;
+        this.plantId = plantId;
+    }
+
 
     /*    public Transactions(Users userId, Plants plantId, int price, String trade_offer, String trade_status) {
             this.trade_offer = trade_offer;
@@ -31,9 +39,6 @@ public class Transactions {
             this.trade_offer = plantId.getId();
 
         }*/
-    public Transactions() {
-    }
-
     public String getId() {
         return id;
     }
@@ -42,6 +47,29 @@ public class Transactions {
         this.id = id;
     }
 
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
+    }
+
+    public String getTransactionId() { //Im making it more clear by specifying its the id of the transaction
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.id = transactionId;
+    }
 
     public int getPrice() {
         return price;
@@ -50,6 +78,7 @@ public class Transactions {
     public void setPrice(int price) {
         this.price = price;
     }
+
 
 
     public String getTrade_offer(String trade_offer) { //Again, this is the plant id of the buyer id user
@@ -67,6 +96,6 @@ public class Transactions {
     public void setTrade_status(String trade_status) {
         this.trade_status = trade_status;
     }
-
 }
+
 
