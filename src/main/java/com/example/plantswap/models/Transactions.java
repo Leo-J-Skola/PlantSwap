@@ -16,7 +16,7 @@ public class Transactions {
     private String transactionId;
     private String userId;
     private boolean available;
-    private String offeredPlantId; //This is the plantId being offered for the user that made the transaction listing
+    private String tradeOffers; //This is a trade offer id, since we want users to be able to make multiple trade offers
     private String plantId;
 
     private String buyerId;
@@ -52,6 +52,33 @@ public class Transactions {
     }
 
     public String getTransactionType() {
+        return transactionType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getPlantId() {
+        return plantId;
+    }
+
+    public void setPlantId(String plantId) {
+        this.plantId = plantId;
+    }
+
+    public String getTradeOffers() {
+        return tradeOffers;
+    }
+
+    public void setTradeOffers(String tradeOffers) {
+        this.tradeOffers = tradeOffers;
+    }
+    public String getTransactionType(String transactionType) {
         return transactionType;
     }
 

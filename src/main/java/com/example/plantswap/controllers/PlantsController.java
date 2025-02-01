@@ -40,14 +40,14 @@ public class PlantsController {
 
     @GetMapping
     public ResponseEntity<List<Plants>> getAllPlants() {
-        List<Plants> plant = plantServices.getAllPlants();
-        return new ResponseEntity<>(plant, HttpStatus.FOUND);
+        List<Plants> getAllPlants = plantServices.getAllPlants();
+        return new ResponseEntity<>(getAllPlants, HttpStatus.FOUND);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Optional<Plants>> getPlantById(@PathVariable String id) {
-        Optional<Plants> plant = plantServices.getPlantById(id);
-        return new ResponseEntity<>(plant, HttpStatus.FOUND);
+        Optional<Plants> getPlantById = plantServices.getPlantById(id);
+        return new ResponseEntity<>(getPlantById, HttpStatus.FOUND);
     }
 
 }

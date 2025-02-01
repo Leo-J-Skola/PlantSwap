@@ -12,7 +12,6 @@ public interface TransactionsRepo extends MongoRepository<Transactions, String> 
     Optional<Transactions> findById(String id);
     Optional<Transactions> findByUserId(String userId);
     Optional<Transactions> findByPlantId(String plantId);
-
-
     Optional<Transactions> findByTransactionType(String transactionType);
+    Optional<Transactions> findByAvailable(boolean available);
 }

@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.data.annotation.Id;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -42,14 +42,14 @@ public class UsersController {
 
     @GetMapping
     public ResponseEntity<List<Users>> getAllUsers() {
-        List<Users> user = userServices.getAllUsers();
-        return new ResponseEntity<>(user, HttpStatus.FOUND);
+        List<Users> getAllUsers = userServices.getAllUsers();
+        return new ResponseEntity<>(getAllUsers, HttpStatus.FOUND);
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<List<Users>> getUserByName(@PathVariable String name) {
-        List<Users> user = userServices.getUserByName(name);
-        return new ResponseEntity<>(user, HttpStatus.FOUND);
+        List<Users> getUserByName = userServices.getUserByName(name);
+        return new ResponseEntity<>(getUserByName, HttpStatus.FOUND);
     }
 
     @GetMapping("/{id}/plants")
