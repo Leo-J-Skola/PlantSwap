@@ -12,11 +12,12 @@ public class Users {
     private String id;
     private String userId;
     private String name;
-    private String transactionId;
+    private List<String> transactionId; //all transactions the user has posted
+    private List<String> plantId; //the plants the user owns
 
-    private List<String> plantId;//the plants the user owns
-
-    public Users(List<String> plantId) {
+    public Users(String id, String name, List<String> plantId) {
+        this.id = id;
+        this.name = name;
         this.plantId = plantId;
     }
 
@@ -42,22 +43,6 @@ public class Users {
 
     public void setPlantId(List<String> plantId) {
         this.plantId = plantId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
     }
 
 }

@@ -19,7 +19,7 @@ public class Transactions {
     private boolean available;
     private String tradeOffers; //This is a trade offer id, since we want users to be able to make multiple trade offers
     private String plantId;
-
+    private String transactionId;
     private ObjectId buyerId;
 
     private String trade_offer;
@@ -31,7 +31,7 @@ public class Transactions {
         this.plantId = plantId;
     }*/
 
-    public void Transactions(String id, String userId, String plantId, int price) {
+    public Transactions(String id, String userId, String plantId, int price) {
         this.id = id;
         this.userId = userId;
         this.plantId = plantId;

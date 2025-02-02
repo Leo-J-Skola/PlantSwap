@@ -35,10 +35,11 @@ public class UsersController {
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<Users> updateUser(@RequestBody Users id) {
-        Users updatedUser = userServices.updateUser(id);
+    public ResponseEntity<Users> updateUser(@PathVariable ObjectId id, @RequestBody Users user) {
+        Users updatedUser = userServices.updateUser(id, user);
         return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
     }
+
 
     @GetMapping
     public ResponseEntity<List<Users>> getAllUsers() {
@@ -59,7 +60,7 @@ public class UsersController {
     }
 
     @GetMapping("/{id}/transactions")
-    public ResponseEntity <List<Transactions>> getUserTransactions(@PathVariable ObjectId id) {
+    public ResponseEntity<List<Transactions>> getUserTransactions(@PathVariable ObjectId id) {
         List<Transactions> getUserTransactions = userServices.getUserTransactions(id);
         return new ResponseEntity<>(getUserTransactions, HttpStatus.FOUND);
     }

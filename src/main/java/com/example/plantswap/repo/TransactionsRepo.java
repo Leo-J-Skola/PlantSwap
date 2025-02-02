@@ -1,5 +1,6 @@
 package com.example.plantswap.repo;
 
+import com.example.plantswap.models.Plants;
 import com.example.plantswap.models.Transactions;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -14,4 +15,5 @@ public interface TransactionsRepo extends MongoRepository<Transactions, ObjectId
     Optional<Transactions> findByPlantId(ObjectId plantId);
     Optional<Transactions> findByTransactionType(String transactionType);
     Optional<Transactions> findByAvailable(boolean available);
+    List<Transactions> findByTransactionId(ObjectId transactionId);
 }

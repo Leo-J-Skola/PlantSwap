@@ -12,6 +12,7 @@ public interface UsersRepo extends MongoRepository<Users, ObjectId> {
 
     List<Users> findByName(String name);
     Optional<Users> findById(ObjectId id);
+    List<Users> findByUserId(ObjectId userId);
 /*    Optional<Users> findByPlantId(ObjectId plantId);
     Optional<Users> findByTransactionId(ObjectId transactionId);
     Optional<Users> findPlantsByUserId(ObjectId id);*/

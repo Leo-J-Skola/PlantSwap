@@ -21,12 +21,15 @@ public class Plants {
     private String tradeOrSell;
     private int price;
     private List<String> images;
-    private String status; //Checks if the plant is available
     private String userId; //Person that owns the plant
     private String plantId;
+    private String transactionId;
 
-    public Plants(String userId) {
+    public Plants(String id, String userId, String name) {
+        this.id = id;
         this.userId = userId;
+        this.name = name;
+
     }
 
     public String getId() {
@@ -43,14 +46,6 @@ public class Plants {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getPlantId() {
-        return plantId;
-    }
-
-    public void setPlantId(String plantId) {
-        this.plantId = plantId;
     }
 
     public String getName() {

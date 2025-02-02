@@ -13,6 +13,7 @@ import com.example.plantswap.repo.PlantsRepo;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserServices {
@@ -25,26 +26,26 @@ public class UserServices {
     private TransactionsRepo transactionsRepo;
 
     public Users createUser(Users user) {
-        /*        validateUser(user);*/
+        validateUser(user);
         return usersRepo.save(user);
     }
 
     public void deleteUser(Users user) {
         if (Objects.isNull(user)) {
-            throw new IllegalArgumentException("User cannot be null.");
+            throw new IllegalArgumentException("User not found.");
         }
         usersRepo.delete(user);
     }
 
-    public Users updateUser(Users user) {
-        /*        validateUser(user);*/
-        updateExistingUser(user);
-        return usersRepo.save(user);
-    }
-
-    private void updateExistingUser(Users user) {
+    public Users updateUser(ObjectId id, Users user) {
+        validateUser(user);                                             //Gets the user id from the url (http://localhost:8080/users/{id})
+        Optional<Users> existingUser = usersRepo.findById(id);          //so you dont have to add "id:" "" with the correct id
+        if (existingUser.isEmpty()) {                                   //makes it so you cant accidentally create a new user
+            throw new IllegalArgumentException("User not found.");
+        }
+        user.setId(existingUser.get().getId());
         user.setName(user.getName());
-        /*user.setPlantId(user.getPlantId());*/
+        return usersRepo.save(user);
     }
 
     public List<Users> getAllUsers() {
@@ -67,22 +68,16 @@ public class UserServices {
     }
 
     public List<Transactions> getUserTransactions(ObjectId userId) {
-        return transactionsRepo.findByUserId(userId);
+        return transactionsRepo.findByTransactionId(userId);
+    }
 
-        //This makes sure a user cannot update or create a user with invalid information.
-/*    private void validateUser(Users user) {
+    //This makes sure a user cannot update or create a user with invalid information.
+    private void validateUser(Users user) {
         if (user.getName() == null || user.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("name can not be empty or null.");
-
+            throw new IllegalArgumentException("Invalid name. It cannot be empty");
         }
-
-        if (user.getPlantId() == null || user.getPlantId().isEmpty()) {
-            user.setPlantId(null);
-        }
-
-        if (user.getTransactionId() == null || user.getTransactionId().isEmpty()) {
-            user.setTransactionId(null);
-        }
-    }*/
     }
 }
+
+
+
