@@ -10,6 +10,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.transaction.TransactionSuspensionNotSupportedException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,17 +22,18 @@ public class TransactionServices {
     @Autowired
     private PlantsRepo plantsRepo;
 
-    public Transactions createTransaction(Transactions transaction) {
-/*        validateTransaction(transaction);*/
+/*    public Transactions createTransaction(Transactions transaction) {
+        *//*        validateTransaction(transaction);*//*
         return transaction;
-    }
+    }*/
 
     public List<Transactions> getAllTransactions() {
         return transactionsRepo.findAll();
     }
 
-    public Transactions getTransactionById(String id) {
-        return transactionsRepo.findById(id).get();
+
+    public Optional<Transactions> getTransactionById(String id) {
+        return transactionsRepo.findById(id);
     }
 
     public Optional<Transactions> getTransactionsByUserId(String id) {
@@ -45,31 +48,27 @@ public class TransactionServices {
         return transactionsRepo.findByTransactionType("sell");
     }
 
-    public Transactions createSellTransaction(Transactions transaction, String userId, String plantId, int price, Object o, Object o1) {
-        if (transaction.getId() == null) {
-            throw new IllegalArgumentException("The user_id can not be empty or null.");
+    public Transactions createTransaction(Transactions transaction) {
+        if (transaction.getUserId() == null) {
+            throw new IllegalArgumentException("Could not find user with that id.");
         }
-
-        if (transaction.getPrice() < 50 || transaction.getPrice() > 1000) {
-            throw new IllegalArgumentException("Plant price can not be less than 50 or more than 1000.");
+        if (transaction.getPlantId() == null) {
+            throw new IllegalArgumentException("Could not find plant with that id.");
         }
-
+        if (Objects.equals(transaction.getTransactionType(), "sell")) {
+            if (transaction.getPrice() > 50 || transaction.getPrice() < 1000) {
+                throw new IllegalArgumentException("Plant price must be between 50 and 1000.");
+            }
+            transaction.setTransactionType("sell");
+            transaction.setAvailable(true);
+            transactionsRepo.save(transaction);
+            return transaction;
+        }
+        transaction.setTransactionType("trade");
+        transaction.setAvailable(true);
+        transaction.setTrade_status("");
         transactionsRepo.save(transaction);
         return transaction;
     }
 
-    public Transactions createTradeTransaction(Transactions transaction) {
-        if (transaction.getId() == null) {
-            throw new IllegalArgumentException("The id can not be empty or null.");
-        }
-        return transaction;
-    }
-
-/*    private void validateTransaction(Transactions transaction) {
-        if (transaction.getTrade() != "trade" || transaction.getSell() != "sell")  {
-            throw new IllegalArgumentException("You have to specify if you want to trade or sell your plant.");
-        }
-
-        }*/
 }
-

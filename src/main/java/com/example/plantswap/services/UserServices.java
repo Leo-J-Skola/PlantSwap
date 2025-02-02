@@ -43,7 +43,7 @@ public class UserServices {
 
     private void updateExistingUser(Users user) {
         user.setName(user.getName());
-        user.setPlantId(user.getPlantId());
+        /*user.setPlantId(user.getPlantId());*/
     }
 
 
@@ -91,9 +91,3 @@ public class UserServices {
     }
 
 }
-
-
-
-
-
-

@@ -68,37 +68,31 @@ public class PlantServices {
 
 
     //This makes sure a user cannot update or create a plant with invalid information.
-        private void validatePlant(Plants plant) {
-            if (plant.getName() == null || plant.getName().trim().isEmpty()) {
-                throw new IllegalArgumentException("Plant name can not be empty or null.");
+    private void validatePlant(Plants plant) {
+        if (plant.getName() == null || plant.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Plant name can not be empty or null.");
 
-            }
+        }
 
-            if (plant.getScientificName() == null || plant.getScientificName().trim().isEmpty()) {
-                throw new IllegalArgumentException("The scientific name can not be empty or null.");
-            }
+        if (plant.getScientificName() == null || plant.getScientificName().trim().isEmpty()) {
+            throw new IllegalArgumentException("The scientific name can not be empty or null.");
+        }
 
-            if (plant.getType() == null || plant.getType().trim().isEmpty()) {
-                throw new IllegalArgumentException("The type can not be empty or null.");
-            }
+        if (plant.getType() == null || plant.getType().trim().isEmpty()) {
+            throw new IllegalArgumentException("The type can not be empty or null.");
+        }
 
-            if (plant.getLightReq() == null || plant.getLightReq().trim().isEmpty()) {
-                throw new IllegalArgumentException("The light requirement can not be empty or null.");
-            }
+        if (plant.getLightReq() == null || plant.getLightReq().trim().isEmpty()) {
+            throw new IllegalArgumentException("The light requirement can not be empty or null.");
+        }
 
-            if (plant.getWaterReq() == null || plant.getWaterReq().trim().isEmpty()) {
-                throw new IllegalArgumentException("The water requirement can not be empty or null.");
-            }
+        if (plant.getWaterReq() == null || plant.getWaterReq().trim().isEmpty()) {
+            throw new IllegalArgumentException("The water requirement can not be empty or null.");
+        }
 
-            if (plant.getDifficulty() < 1 || plant.getDifficulty() > 5) { //Do i let the user put a custom difficulty?
-                //Should i add a default difficulty depending on what plant it is? For now its custom.
-                throw new IllegalArgumentException("Difficulty must be between 1 and 5.");
-            }
+        if (plant.getDifficulty() < 1 || plant.getDifficulty() > 5) { //Do i let the user put a custom difficulty?
+            //Should i add a default difficulty depending on what plant it is? For now its custom.
+            throw new IllegalArgumentException("Difficulty must be between 1 and 5.");
         }
     }
-
-
-
-
-
-
+}

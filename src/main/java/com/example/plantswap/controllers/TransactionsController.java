@@ -1,5 +1,6 @@
 package com.example.plantswap.controllers;
 
+import com.example.plantswap.models.Plants;
 import com.example.plantswap.models.Transactions;
 
 import com.example.plantswap.models.Users;
@@ -21,41 +22,54 @@ public class TransactionsController {
     private TransactionServices transactionServices;
     private TransactionsRepo transactionsRepo;
 
-    @PostMapping("/trade")
+/*    @PostMapping("/trade")
     public ResponseEntity<Transactions> tradeTransaction(@RequestBody Transactions transaction) {
         Transactions createdTradeTransaction = transactionServices.createTradeTransaction(transaction);
         return new ResponseEntity<>(createdTradeTransaction, HttpStatus.CREATED);
+    }*/
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Optional<Transactions>> getTransactionsByUserId(@PathVariable String userId) {
+        Optional<Transactions> getTransactionsByUserId = transactionServices.getTransactionsByUserId(userId);
+        return new ResponseEntity<>(getTransactionsByUserId, HttpStatus.FOUND);
     }
 
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<Optional<Transactions>> getTransactionsByUserId(@PathVariable String userId) {
-        Optional<Transactions> transaction = transactionServices.getTransactionsByUserId(userId);
-        return new ResponseEntity<>(transaction, HttpStatus.FOUND);
+    @GetMapping("/transaction/{id}")
+    public ResponseEntity<Optional<Transactions>> getTransactionById(@PathVariable String id) {
+        Optional<Transactions> getTransactionById = transactionServices.getTransactionById(id);
+        return new ResponseEntity<>(getTransactionById, HttpStatus.FOUND);
     }
 
     @GetMapping
     public ResponseEntity<List<Transactions>> getAllTransactions() {
-        List<Transactions> user = transactionServices.getAllTransactions();
-        return new ResponseEntity<>(user, HttpStatus.FOUND);
+        List<Transactions> transactions = transactionServices.getAllTransactions();
+        return new ResponseEntity<>(transactions, HttpStatus.FOUND);
     }
 
-        @PostMapping("/trade/{userId}/{plantId}")
-        public ResponseEntity<Transactions> createTradeTransaction(String transactionId, @PathVariable String userId, @PathVariable String plantId) {
-            Transactions transaction = new Transactions(transactionId, userId, plantId);
-            transactionsRepo.save(transaction);
-            return ResponseEntity.ok(transaction);
-        }
-
-        @GetMapping("/trades")
-        public ResponseEntity<Optional<Transactions>> getTradeTransactions() {
-            Optional<Transactions> trades = transactionsRepo.findByTransactionType("trade");
-            if (!trades.isEmpty()) {
-                return ResponseEntity.ok(trades);
-            } else {
-                return ResponseEntity.notFound().build();
-        }
-        }
+    @PostMapping("/trade/{userId}/{plantId}")
+    public ResponseEntity<Transactions> createTradeTransaction(@RequestBody Transactions transaction) {
+        Transactions createTradeTransaction = transactionServices.createTransaction(transaction);
+        transactionsRepo.save(createTradeTransaction);
+        return ResponseEntity.ok(createTradeTransaction);
     }
+
+    @GetMapping("/trades")
+    public ResponseEntity<Optional<Transactions>> getTradeTransactions() {
+        Optional<Transactions> trades = transactionServices.getTradeTransactions(("trade"));
+        return ResponseEntity.ok(trades);
+    }
+
+    @GetMapping("/sells")
+    public ResponseEntity<Optional<Transactions>> getSellTransactions() {
+        Optional<Transactions> sells = transactionServices.getSellTransactions(("sell"));
+        return ResponseEntity.ok(sells);
+    }
+    @PostMapping("/sell/{userId}/{plantId}/{price}")
+    public ResponseEntity<Transactions> createSellTransaction(@RequestBody Transactions transaction) {
+        Transactions createSellTransaction = transactionServices.createTransaction(transaction);
+        return ResponseEntity.ok(createSellTransaction);
+    }
+}
 
 

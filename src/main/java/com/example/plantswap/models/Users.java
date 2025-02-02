@@ -10,8 +10,8 @@ public class Users {
     @Id
     private String id;
     private String name;
-    private List<String> transactionId;
-    private List<Users> plantId; //the plants the user owns
+    private String transactionId;
+    private String plantId; //the plants the user owns
 
     public String getId() {
         return id;
@@ -27,16 +27,16 @@ public class Users {
     public void setName(String name) {
         this.name = name;
     }
-    public List<Users> getPlantId() {
+    public String getPlantId() {
         return plantId;
     }
-    public void setPlantId(List<Users> plantId) {
+    public void setPlantId(String plantId) {
         this.plantId = plantId;
     }
-    public List<String> getTransactionId() {
+    public String getTransactionId() {
         return transactionId;
     }
-    public void setTransactionId(List<String> transactionId) {
+    public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
     }
 

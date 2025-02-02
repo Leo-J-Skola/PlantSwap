@@ -13,7 +13,7 @@ public class Transactions {
     private int price;
 
     private String transactionType;
-    private String transactionId;
+
     private String userId;
     private boolean available;
     private String tradeOffers; //This is a trade offer id, since we want users to be able to make multiple trade offers
@@ -24,10 +24,17 @@ public class Transactions {
     private String trade_offer;
     private String trade_status; //accept,decline or pending (pending meaning a trade offer has been made and is waiting to be accepted or declined)
 
-    public Transactions(String transactionId, String userId, String plantId) {
+/*    public SellTransactions(String transactionId, String userId, String plantId) {
         this.transactionId = transactionId;
         this.userId = userId;
         this.plantId = plantId;
+    }*/
+
+    public void Transactions(String id, String userId, String plantId, int price) {
+        this.id = id;
+        this.userId = userId;
+        this.plantId = plantId;
+        this.price = price;
     }
 
 
@@ -90,14 +97,6 @@ public class Transactions {
         this.available = available;
     }
 
-    public String getTransactionId() { //Im making it more clear by specifying its the id of the transaction
-        return transactionId;
-    }
-
-    public void setTransactionId(String transactionId) {
-        this.id = transactionId;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -124,5 +123,3 @@ public class Transactions {
         this.trade_status = trade_status;
     }
 }
-
-
