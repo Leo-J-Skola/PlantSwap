@@ -1,6 +1,7 @@
 package com.example.plantswap.models;
 
 import jakarta.validation.constraints.Max;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,7 +20,7 @@ public class Transactions {
     private String tradeOffers; //This is a trade offer id, since we want users to be able to make multiple trade offers
     private String plantId;
 
-    private String buyerId;
+    private ObjectId buyerId;
 
     private String trade_offer;
     private String trade_status; //accept,decline or pending (pending meaning a trade offer has been made and is waiting to be accepted or declined)
@@ -36,7 +37,6 @@ public class Transactions {
         this.plantId = plantId;
         this.price = price;
     }
-
 
     /*    public Transactions(Users userId, Plants plantId, int price, String trade_offer, String trade_status) {
             this.trade_offer = trade_offer;

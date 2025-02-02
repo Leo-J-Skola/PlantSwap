@@ -6,6 +6,7 @@ import com.example.plantswap.models.Transactions;
 import com.example.plantswap.models.Users;
 import com.example.plantswap.repo.TransactionsRepo;
 import com.example.plantswap.services.TransactionServices;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,15 +29,15 @@ public class TransactionsController {
         return new ResponseEntity<>(createdTradeTransaction, HttpStatus.CREATED);
     }*/
 
-
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Optional<Transactions>> getTransactionsByUserId(@PathVariable String userId) {
-        Optional<Transactions> getTransactionsByUserId = transactionServices.getTransactionsByUserId(userId);
+    public ResponseEntity<List<Transactions>> getTransactionsByUserId(@PathVariable ObjectId userId) {
+        List<Transactions> getTransactionsByUserId = transactionServices.getTransactionsByUserId(userId);
         return new ResponseEntity<>(getTransactionsByUserId, HttpStatus.FOUND);
     }
 
+
     @GetMapping("/transaction/{id}")
-    public ResponseEntity<Optional<Transactions>> getTransactionById(@PathVariable String id) {
+    public ResponseEntity<Optional<Transactions>> getTransactionById(@PathVariable ObjectId id) {
         Optional<Transactions> getTransactionById = transactionServices.getTransactionById(id);
         return new ResponseEntity<>(getTransactionById, HttpStatus.FOUND);
     }

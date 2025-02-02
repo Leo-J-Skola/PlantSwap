@@ -7,10 +7,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.annotation.Id;
 import java.util.List;
 import java.util.Optional;
-
-public interface UsersRepo extends MongoRepository<Users, String> {
+import org.bson.types.ObjectId;
+public interface UsersRepo extends MongoRepository<Users, ObjectId> {
 
     List<Users> findByName(String name);
-    Optional<Users> findById(String id);
-    List<Users> findByPlantId(String plantId);
+    Optional<Users> findById(ObjectId id);
+/*    Optional<Users> findByPlantId(ObjectId plantId);
+    Optional<Users> findByTransactionId(ObjectId transactionId);
+    Optional<Users> findPlantsByUserId(ObjectId id);*/
 }

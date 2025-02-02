@@ -4,6 +4,7 @@ import com.example.plantswap.repo.PlantsRepo;
 import com.example.plantswap.models.Plants;
 import com.example.plantswap.services.PlantServices;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class PlantsController {
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<Optional<Plants>> getPlantById(@PathVariable String id) {
+    public ResponseEntity<Optional<Plants>> getPlantById(@PathVariable ObjectId id) {
         Optional<Plants> getPlantById = plantServices.getPlantById(id);
         return new ResponseEntity<>(getPlantById, HttpStatus.FOUND);
     }

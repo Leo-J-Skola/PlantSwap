@@ -1,10 +1,12 @@
 package com.example.plantswap.services;
 
+import com.example.plantswap.models.Users;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.plantswap.models.Plants;
 import com.example.plantswap.repo.PlantsRepo;
-import org.springframework.data.annotation.Id;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -15,6 +17,12 @@ public class PlantServices {
 
     @Autowired
     private PlantsRepo plantsRepo;
+
+    @Autowired
+    private UserServices userServices;
+
+    @Autowired
+    private TransactionServices transactionServices;
 
     public Plants createPlant(Plants plant) {
         validatePlant(plant);
@@ -55,8 +63,8 @@ public class PlantServices {
         return plantsRepo.findAll();
     }
 
-    public Optional<Plants> getPlantById(String id) {
-        if (id == null || id.trim().isEmpty()) {
+    public Optional<Plants> getPlantById(ObjectId id) {
+        if (id == null) {
             throw new IllegalArgumentException("Plant id can not be empty or null.");
         }
         Optional<Plants> plants = plantsRepo.findById(id);
@@ -66,12 +74,11 @@ public class PlantServices {
         return plants;
     }
 
-
     //This makes sure a user cannot update or create a plant with invalid information.
+
     private void validatePlant(Plants plant) {
         if (plant.getName() == null || plant.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Plant name can not be empty or null.");
-
         }
 
         if (plant.getScientificName() == null || plant.getScientificName().trim().isEmpty()) {

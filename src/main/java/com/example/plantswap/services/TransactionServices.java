@@ -4,10 +4,9 @@ import com.example.plantswap.models.Plants;
 import com.example.plantswap.models.Transactions;
 import com.example.plantswap.repo.PlantsRepo;
 import com.example.plantswap.repo.TransactionsRepo;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.data.annotation.Id;
-import org.springframework.transaction.TransactionSuspensionNotSupportedException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,8 +18,6 @@ public class TransactionServices {
 
     @Autowired
     private TransactionsRepo transactionsRepo;
-    @Autowired
-    private PlantsRepo plantsRepo;
 
 /*    public Transactions createTransaction(Transactions transaction) {
         *//*        validateTransaction(transaction);*//*
@@ -31,12 +28,11 @@ public class TransactionServices {
         return transactionsRepo.findAll();
     }
 
-
-    public Optional<Transactions> getTransactionById(String id) {
+    public Optional<Transactions> getTransactionById(ObjectId id) {
         return transactionsRepo.findById(id);
     }
 
-    public Optional<Transactions> getTransactionsByUserId(String id) {
+    public List<Transactions> getTransactionsByUserId(ObjectId id) {
         return transactionsRepo.findByUserId(id);
     }
 
