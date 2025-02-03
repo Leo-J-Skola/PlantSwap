@@ -57,6 +57,11 @@ public class TransactionsController {
     public ResponseEntity<?> createTransaction(@PathVariable ObjectId userId, @PathVariable ObjectId plantId, @RequestBody Transactions transaction) {
             Transactions newTransaction = transactionServices.createTransaction(userId, plantId, transaction);
             return ResponseEntity.ok(newTransaction);
-
         }
+    @PutMapping("/{transactionId}/{plantId}/{userId}")
+    public ResponseEntity<?> addTradeOffer(@PathVariable ObjectId transactionId, @PathVariable ObjectId plantId, @PathVariable ObjectId userId) {
+        Transactions updatedTransaction = transactionServices.addTradeOffer(transactionId, plantId, userId);
+        return ResponseEntity.ok(updatedTransaction);
     }
+
+}

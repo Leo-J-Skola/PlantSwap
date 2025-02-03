@@ -58,6 +58,20 @@ public class TransactionServices {
 
         return transactionsRepo.save(transaction);
     }
+        //Updates an existing transaction, adding trade status and trade offer from a user with his plant
+    public Transactions addTradeOffer(ObjectId transactionId, ObjectId plantId, ObjectId userId) {
+        Transactions transaction = transactionsRepo.findById(transactionId).orElseThrow(() -> new IllegalArgumentException("Transaction not found."));
+        Plants plant = plantsRepo.findById(plantId).orElseThrow(() -> new IllegalArgumentException("Plant not found."));
+        Users user = usersRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        if (!plant.getUserId().equals(user.getId())) {
+            throw new IllegalArgumentException("User does not own this plant.");
+        }
+        transaction.getTradeOfferId().add("user " + userId + " is offering plant '" + plantId + "'.");
+        transaction.setTradeStatus("pending");
+
+        return transactionsRepo.save(transaction);
+    }
 
     //This is postman body check so you have to specify its a trade or if you are selling the plant
     private void validateTransaction(Transactions transaction) {
