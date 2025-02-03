@@ -18,12 +18,6 @@ public class PlantServices {
     @Autowired
     private PlantsRepo plantsRepo;
 
-    @Autowired
-    private UserServices userServices;
-
-    @Autowired
-    private TransactionServices transactionServices;
-
     public Plants createPlant(Plants plant) {
         validatePlant(plant);
 
@@ -36,28 +30,6 @@ public class PlantServices {
         }
         plantsRepo.delete(plant);
     }
-
-    public Plants updatePlant(Plants plant) {
-        validatePlant(plant);
-        updateExistingPlant(plant);
-        return plantsRepo.save(plant);
-    }
-
-    //Currently this forces me to update ALL of these at once.
-    //I need to fix this later if i want to, for example just change the difficulty.
-
-    private void updateExistingPlant(Plants plant) {
-        plant.setName(plant.getName());
-
-        plant.setDifficulty(plant.getDifficulty());
-        plant.setScientificName(plant.getScientificName());
-        plant.setType(plant.getType());
-        plant.setLightReq(plant.getLightReq());
-        plant.setWaterReq(plant.getWaterReq());
-        plant.setImages(plant.getImages());
-        plant.setAge(plant.getAge());
-    }
-
 
     public List<Plants> getAllPlants() {
         return plantsRepo.findAll();
@@ -74,11 +46,48 @@ public class PlantServices {
         return plants;
     }
 
-    //This makes sure a user cannot update or create a plant with invalid information.
+                    //updatePlant method is specifically for updating a plant
+                    //It checks if the plant exists including all fields
+                    //If you dont edit a field, it will not update it
+                    //It makes it so you can edit specifically one field if you want to
+                    //I found .orElseThrow(() -> new NoSuchElementException
+                    //from the Basic_bookshop_api project you had made
 
-    private void validatePlant(Plants plant) {
+    public Plants updatePlant(ObjectId id, Plants updatedPlant) {
+        Plants existingPlant = plantsRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Plant with id " + id + " not found"));
+
+        if (updatedPlant.getName() != null && !updatedPlant.getName().trim().isEmpty()) {
+            existingPlant.setName(updatedPlant.getName());
+        }
+        if (updatedPlant.getScientificName() != null && !updatedPlant.getScientificName().trim().isEmpty()) {
+            existingPlant.setScientificName(updatedPlant.getScientificName());
+        }
+        if (updatedPlant.getType() != null && !updatedPlant.getType().trim().isEmpty()) {
+            existingPlant.setType(updatedPlant.getType());
+        }
+        if (updatedPlant.getLightReq() != null && !updatedPlant.getLightReq().trim().isEmpty()) {
+            existingPlant.setLightReq(updatedPlant.getLightReq());
+        }
+        if (updatedPlant.getWaterReq() != null && !updatedPlant.getWaterReq().trim().isEmpty()) {
+            existingPlant.setWaterReq(updatedPlant.getWaterReq());
+        }
+        if (updatedPlant.getImages() != null && !updatedPlant.getImages().isEmpty()) {
+            existingPlant.setImages(updatedPlant.getImages());
+        }
+        if (updatedPlant.getAge() <= 100 && updatedPlant.getAge() >= 0) {
+            existingPlant.setAge(updatedPlant.getAge());
+        }
+        if (updatedPlant.getDifficulty() <= 10 && updatedPlant.getDifficulty() >= 1) {
+            existingPlant.setDifficulty(updatedPlant.getDifficulty());
+        }
+        return plantsRepo.save(existingPlant);
+    }
+
+    //This makes sure a user cannot create a plant with invalid information.
+
+    private void validatePlant(Plants plant) { //This one is specifically for creating a plant
         if (plant.getName() == null || plant.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Plant name can not be empty or null.");
+            throw new IllegalArgumentException("The plant name can not be empty or null.");
         }
 
         if (plant.getScientificName() == null || plant.getScientificName().trim().isEmpty()) {
@@ -86,19 +95,26 @@ public class PlantServices {
         }
 
         if (plant.getType() == null || plant.getType().trim().isEmpty()) {
-            throw new IllegalArgumentException("The type can not be empty or null.");
+            throw new IllegalArgumentException("You have to specify a type.");
         }
 
         if (plant.getLightReq() == null || plant.getLightReq().trim().isEmpty()) {
-            throw new IllegalArgumentException("The light requirement can not be empty or null.");
+            throw new IllegalArgumentException("You have to input a light requirement.");
         }
 
         if (plant.getWaterReq() == null || plant.getWaterReq().trim().isEmpty()) {
-            throw new IllegalArgumentException("The water requirement can not be empty or null.");
+            throw new IllegalArgumentException("You have to input a water requirement.");
         }
 
-        if (plant.getDifficulty() < 1 || plant.getDifficulty() > 5) { //Do i let the user put a custom difficulty?
-            //Should i add a default difficulty depending on what plant it is? For now its custom.
+        if (plant.getImages() == null || plant.getImages().isEmpty()) {
+            throw new IllegalArgumentException("You need to attach an image");
+        }
+
+        if (plant.getAge() < 0 || plant.getAge() > 100) {
+            throw new IllegalArgumentException("The age can not be less than 0 or more than 100.");
+        }
+
+        if (plant.getDifficulty() < 1 || plant.getDifficulty() > 5) {
             throw new IllegalArgumentException("Difficulty must be between 1 and 5.");
         }
     }

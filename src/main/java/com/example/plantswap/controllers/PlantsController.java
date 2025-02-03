@@ -1,5 +1,6 @@
 package com.example.plantswap.controllers;
 
+import com.example.plantswap.models.Users;
 import com.example.plantswap.repo.PlantsRepo;
 import com.example.plantswap.models.Plants;
 import com.example.plantswap.services.PlantServices;
@@ -34,8 +35,8 @@ public class PlantsController {
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<Plants> updatePlant(@RequestBody Plants id) {
-        Plants updatedPlant = plantServices.updatePlant(id);
+    public ResponseEntity<Plants> updatePlant(@PathVariable ObjectId id, @RequestBody Plants plant) {
+        Plants updatedPlant = plantServices.updatePlant(id, plant);
         return new ResponseEntity<>(updatedPlant, HttpStatus.ACCEPTED);
     }
 
