@@ -18,7 +18,6 @@ public class Plants {
     private String lightReq;
     private String waterReq;
     private int difficulty;
-    private String tradeOrSell;
     private int price;
     private List<String> images;
     private String userId; //Person that owns the plant

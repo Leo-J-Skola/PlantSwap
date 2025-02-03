@@ -23,12 +23,6 @@ public class TransactionsController {
     private TransactionServices transactionServices;
     private TransactionsRepo transactionsRepo;
 
-/*    @PostMapping("/trade")
-    public ResponseEntity<Transactions> tradeTransaction(@RequestBody Transactions transaction) {
-        Transactions createdTradeTransaction = transactionServices.createTradeTransaction(transaction);
-        return new ResponseEntity<>(createdTradeTransaction, HttpStatus.CREATED);
-    }*/
-
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Transactions>> getTransactionsByUserId(@PathVariable ObjectId userId) {
         List<Transactions> getTransactionsByUserId = transactionServices.getTransactionsByUserId(userId);
@@ -47,14 +41,7 @@ public class TransactionsController {
         return new ResponseEntity<>(transactions, HttpStatus.FOUND);
     }
 
-    @PostMapping("/trade/{userId}/{plantId}")
-    public ResponseEntity<Transactions> createTradeTransaction(@RequestBody Transactions transaction) {
-        Transactions createTradeTransaction = transactionServices.createTransaction(transaction);
-        transactionsRepo.save(createTradeTransaction);
-        return ResponseEntity.ok(createTradeTransaction);
-    }
-
-    @GetMapping("/trades")
+/*    @GetMapping("/trades")
     public ResponseEntity<Optional<Transactions>> getTradeTransactions() {
         Optional<Transactions> trades = transactionServices.getTradeTransactions(("trade"));
         return ResponseEntity.ok(trades);
@@ -64,12 +51,12 @@ public class TransactionsController {
     public ResponseEntity<Optional<Transactions>> getSellTransactions() {
         Optional<Transactions> sells = transactionServices.getSellTransactions(("sell"));
         return ResponseEntity.ok(sells);
-    }
-    @PostMapping("/sell/{userId}/{plantId}/{price}")
-    public ResponseEntity<Transactions> createSellTransaction(@RequestBody Transactions transaction) {
-        Transactions createSellTransaction = transactionServices.createTransaction(transaction);
-        return ResponseEntity.ok(createSellTransaction);
-    }
-}
+    }*/
 
+    @PostMapping("/{userId}/{plantId}")
+    public ResponseEntity<?> createTransaction(@PathVariable ObjectId userId, @PathVariable ObjectId plantId, @RequestBody Transactions transaction) {
+            Transactions newTransaction = transactionServices.createTransaction(userId, plantId, transaction);
+            return ResponseEntity.ok(newTransaction);
 
+        }
+    }

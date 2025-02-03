@@ -1,16 +1,18 @@
 package com.example.plantswap.services;
 
-import com.example.plantswap.models.Plants;
 import com.example.plantswap.models.Transactions;
-import com.example.plantswap.repo.PlantsRepo;
+import com.example.plantswap.models.Plants;
+import com.example.plantswap.models.Users;
 import com.example.plantswap.repo.TransactionsRepo;
+import com.example.plantswap.repo.PlantsRepo;
+import com.example.plantswap.repo.UsersRepo;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -19,10 +21,11 @@ public class TransactionServices {
     @Autowired
     private TransactionsRepo transactionsRepo;
 
-/*    public Transactions createTransaction(Transactions transaction) {
-        *//*        validateTransaction(transaction);*//*
-        return transaction;
-    }*/
+    @Autowired
+    private PlantsRepo plantsRepo;
+
+    @Autowired
+    private UsersRepo usersRepo;
 
     public List<Transactions> getAllTransactions() {
         return transactionsRepo.findAll();
@@ -36,35 +39,33 @@ public class TransactionServices {
         return transactionsRepo.findByUserId(id);
     }
 
-    public Optional<Transactions> getTradeTransactions(String id) {
-        return transactionsRepo.findByTransactionType("trade");
-    }
+    //Create a transaction by checking the transaction type (trade or sell) and that a user has a plant
+    public Transactions createTransaction(ObjectId userId, ObjectId plantId, Transactions transaction) {
+        Plants plant = plantsRepo.findById(plantId).orElseThrow(() -> new IllegalArgumentException("Plant not found."));
+        Users user = usersRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-    public Optional<Transactions> getSellTransactions(String id) {
-        return transactionsRepo.findByTransactionType("sell");
-    }
+        if (!plant.getUserId().equals(user.getId())) {
+            throw new IllegalArgumentException("User does not own this plant.");
+        }
+        if (plant.getUserId() == null) {
+            throw new IllegalStateException("Plant does not have an owner.");
+        }
 
-    public Transactions createTransaction(Transactions transaction) {
-        if (transaction.getUserId() == null) {
-            throw new IllegalArgumentException("Could not find user with that id.");
-        }
-        if (transaction.getPlantId() == null) {
-            throw new IllegalArgumentException("Could not find plant with that id.");
-        }
-        if (Objects.equals(transaction.getTransactionType(), "sell")) {
-            if (transaction.getPrice() > 50 || transaction.getPrice() < 1000) {
-                throw new IllegalArgumentException("Plant price must be between 50 and 1000.");
-            }
-            transaction.setTransactionType("sell");
-            transaction.setAvailable(true);
-            transactionsRepo.save(transaction);
-            return transaction;
-        }
-        transaction.setTransactionType("trade");
+        validateTransaction(transaction);
+        transaction.setUserId(user.getId());
+        transaction.setPlantId(plant.getId());
         transaction.setAvailable(true);
-        transaction.setTrade_status("");
-        transactionsRepo.save(transaction);
-        return transaction;
+
+        return transactionsRepo.save(transaction);
     }
 
+    //This is postman body check so you have to specify its a trade or if you are selling the plant
+    private void validateTransaction(Transactions transaction) {
+        if (!transaction.getTransactionType().equals("trade") && !transaction.getTransactionType().equals("sell")) {
+            throw new IllegalArgumentException("You have to input if you want to trade or sell your plant.");
+        }
+        if (transaction.getTransactionType().equals("sell") && (transaction.getPrice() < 50 || transaction.getPrice() > 1000)) {
+            throw new IllegalArgumentException("Price must be between 50 and 1000 for a plant.");
+        }
+    }
 }

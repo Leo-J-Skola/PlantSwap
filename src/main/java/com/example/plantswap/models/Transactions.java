@@ -5,25 +5,22 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 
 @Document(collection = "transactions")
 public class Transactions {
     @Max(value=10, message = "The price can not be more than 10.")
     @Id
     private String id;
-    private int price;
-
-    private String transactionType;
-
-    private String userId;
-    private boolean available;
-    private String tradeOffers; //This is a trade offer id, since we want users to be able to make multiple trade offers
-    private String plantId;
     private String transactionId;
-    private ObjectId buyerId;
-
-    private String trade_offer;
-    private String trade_status; //accept,decline or pending (pending meaning a trade offer has been made and is waiting to be accepted or declined)
+    private String userId;
+    private String plantId;
+    private String transactionType; //This is the type of transaction, trade or sell
+    private Integer price;
+    private Boolean available;
+    private List<String> tradeOfferId; // Users offering trade
+    private String tradeStatus; //accept,decline or pending (pending meaning a trade offer has been made and is waiting to be accepted or declined)
 
 /*    public SellTransactions(String transactionId, String userId, String plantId) {
         this.transactionId = transactionId;
@@ -31,31 +28,23 @@ public class Transactions {
         this.plantId = plantId;
     }*/
 
-    public Transactions(String id, String userId, String plantId, int price) {
+    public Transactions(String id, String userId, String plantId, String transactionType, Integer price) {
         this.id = id;
         this.userId = userId;
         this.plantId = plantId;
+        this.transactionType = transactionType;
         this.price = price;
+        this.available = true;
+        this.tradeOfferId = List.of();
+        this.tradeStatus = "pending";
     }
 
-    /*    public Transactions(Users userId, Plants plantId, int price, String trade_offer, String trade_status) {
-            this.trade_offer = trade_offer;
-            this.trade_status = trade_status;
-            this.price = price;
-            this.buyerId = userId.getId();
-            this.trade_offer = plantId.getId();
-
-        }*/
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Boolean getAvailable() {
-        return available;
     }
 
     public String getTransactionType() {
@@ -78,13 +67,6 @@ public class Transactions {
         this.plantId = plantId;
     }
 
-    public String getTradeOffers() {
-        return tradeOffers;
-    }
-
-    public void setTradeOffers(String tradeOffers) {
-        this.tradeOffers = tradeOffers;
-    }
     public String getTransactionType(String transactionType) {
         return transactionType;
     }
@@ -93,33 +75,31 @@ public class Transactions {
         this.transactionType = transactionType;
     }
 
+    public Boolean getAvailable() {
+        return available;
+    }
     public void setAvailable(Boolean available) {
         this.available = available;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
-
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
-
-
-    public String getTrade_offer(String trade_offer) { //Again, this is the plant id of the buyer id user
-        return trade_offer;
+    public List<String> getTradeOfferId() {
+        return tradeOfferId;
+    }
+    public void setTradeOfferId(List<String> tradeOfferId) {
+        this.tradeOfferId = tradeOfferId;
     }
 
-    public void setTrade_offer(String trade_offer) {
-        this.trade_offer = trade_offer;
+    public String getTradeStatus() {
+        return tradeStatus;
     }
-
-    public String getTrade_status(String trade_status) {
-        return trade_status;
-    }
-
-    public void setTrade_status(String trade_status) {
-        this.trade_status = trade_status;
+    public void setTradeStatus(String tradeStatus) {
+        this.tradeStatus = tradeStatus;
     }
 }
