@@ -39,8 +39,13 @@ public class TransactionServices {
     }
 
     //Create a transaction by checking the transaction type (trade or sell) and that a user has a plant
+    //Also had to make a check for max allowed transactions per user here
 
     public Transactions createTransaction(ObjectId userId, ObjectId plantId, Transactions transaction) {
+        long activeTransactions = activeTransactions(userId);
+        if (activeTransactions >= 10) {
+            throw new IllegalStateException("A user cannot have more than 10 active transactions at once.");
+        }
         Plants plant = plantsRepo.findById(plantId).orElseThrow(() -> new IllegalArgumentException("Plant not found."));
         Users user = usersRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -59,7 +64,15 @@ public class TransactionServices {
         return transactionsRepo.save(transaction);
     }
 
+        //This checks for the maximum amount of transactions a user can have
+        //Its more explained in TransactionsRepo.class
+
+        public long activeTransactions(ObjectId userId) {
+        return transactionsRepo.countByUserIdAndAvailable(userId.toString(), true);
+    }
+
         //Updates an existing transaction, adding trade status and trade offer from a user with his plant
+        //addTradeOffer and updateTradeStatus methods are both related to making trading work
 
     public Transactions addTradeOffer(ObjectId transactionId, ObjectId plantId, ObjectId userId) {
         Transactions addTradeOffer = transactionsRepo.findById(transactionId).orElseThrow(() -> new IllegalArgumentException("Transaction not found."));
@@ -109,14 +122,14 @@ public class TransactionServices {
         return transaction;
     }
 
-        //Same checks as trading, but instead also checks if its transaction for money
+        //Same checks as trading, but instead also checks if its a transaction for sale and not trading
         //then makes sure the price input is the same as the price on the transaction
         //also gotta make sure the buyer and seller owns their plants
 
     public Transactions buyTransaction(ObjectId transactionId, ObjectId buyerUserId, int buyerPrice) {
         Transactions transaction = transactionsRepo.findById(transactionId).orElseThrow(() -> new IllegalArgumentException("Transaction not found."));
         if (!transaction.getTransactionType().equals("sell")) {
-            throw new IllegalArgumentException("This transaction is not for sale.");
+            throw new IllegalArgumentException("This transaction is for trading, not for sale.");
         }
         if (buyerPrice != transaction.getPrice()) {
             throw new IllegalArgumentException("Incorrect price.");

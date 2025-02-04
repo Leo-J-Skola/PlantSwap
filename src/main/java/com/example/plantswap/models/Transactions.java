@@ -10,7 +10,6 @@ import java.util.List;
 
 @Document(collection = "transactions")
 public class Transactions {
-    @Max(value=10, message = "The price can not be more than 10.")
     @Id
     private String id;
     private String transactionId;
