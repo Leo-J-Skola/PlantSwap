@@ -69,7 +69,7 @@ public class TransactionServices {
         if (!plant.getUserId().equals(user.getId())) {
             throw new IllegalArgumentException("User does not own this plant.");
         }
-        addTradeOffer.getTradeOfferId().add("user " + userId + " is offering plant '" + plantId + "'.");
+        addTradeOffer.getTradeOfferId().add("User " + userId + " is offering plant '" + plantId + "'.");
         addTradeOffer.setTradeStatus("pending");
 
         return transactionsRepo.save(addTradeOffer);
@@ -106,6 +106,39 @@ public class TransactionServices {
             transaction.setTradeStatus("Completed. Removing transaction from listings...");
             transactionsRepo.delete(transaction);
         }
+        return transaction;
+    }
+
+        //Same checks as trading, but instead also checks if its transaction for money
+        //then makes sure the price input is the same as the price on the transaction
+        //also gotta make sure the buyer and seller owns their plants
+
+    public Transactions buyTransaction(ObjectId transactionId, ObjectId buyerUserId, int buyerPrice) {
+        Transactions transaction = transactionsRepo.findById(transactionId).orElseThrow(() -> new IllegalArgumentException("Transaction not found."));
+        if (!transaction.getTransactionType().equals("sell")) {
+            throw new IllegalArgumentException("This transaction is not for sale.");
+        }
+        if (buyerPrice != transaction.getPrice()) {
+            throw new IllegalArgumentException("Incorrect price.");
+        }
+
+        //Again i have to convert ObjectId to String because of postman...
+        Users buyer = usersRepo.findById(buyerUserId).orElseThrow(() -> new IllegalArgumentException("Buyer not found."));
+        Users seller = usersRepo.findById(new ObjectId(transaction.getUserId())).orElseThrow(() -> new IllegalArgumentException("Seller not found."));
+        Plants plant = plantsRepo.findById(new ObjectId(transaction.getPlantId())).orElseThrow(() -> new IllegalArgumentException("Plant not found."));
+
+        plant.setUserId(buyer.getId().toString());
+        buyer.getPlantId().add(plant.getId().toString());
+        seller.getPlantId().remove(plant.getId().toString());
+
+        plantsRepo.save(plant);
+        usersRepo.save(buyer);
+        usersRepo.save(seller);
+
+        transaction.setAvailable(false);
+        transaction.setTradeStatus("Completed. Removing Transaction from listings...");
+
+        transactionsRepo.delete(transaction);
         return transaction;
     }
 
