@@ -58,10 +58,16 @@ public class TransactionsController {
             Transactions newTransaction = transactionServices.createTransaction(userId, plantId, transaction);
             return ResponseEntity.ok(newTransaction);
         }
+
     @PutMapping("/{transactionId}/{plantId}/{userId}")
     public ResponseEntity<?> addTradeOffer(@PathVariable ObjectId transactionId, @PathVariable ObjectId plantId, @PathVariable ObjectId userId) {
         Transactions updatedTransaction = transactionServices.addTradeOffer(transactionId, plantId, userId);
         return ResponseEntity.ok(updatedTransaction);
     }
 
+    @PutMapping("/{transactionId}/{userId}/status")
+    public ResponseEntity<?> updateTradeStatus(@PathVariable ObjectId transactionId, @PathVariable ObjectId userId, @RequestParam String status) {
+        Transactions updatedTransaction = transactionServices.updateTradeStatus(transactionId, userId, status);
+        return ResponseEntity.ok(updatedTransaction);
+    }
 }

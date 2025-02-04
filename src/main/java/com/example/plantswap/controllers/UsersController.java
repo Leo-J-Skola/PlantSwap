@@ -39,7 +39,6 @@ public class UsersController {
         return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
     }
 
-
     @GetMapping
     public ResponseEntity<List<Users>> getAllUsers() {
         List<Users> getAllUsers = userServices.getAllUsers();

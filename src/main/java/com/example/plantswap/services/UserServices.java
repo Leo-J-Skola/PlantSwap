@@ -54,7 +54,7 @@ public class UserServices {
 
     public List<Users> getUserByName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("User name can not be empty or null.");
+            throw new IllegalArgumentException("name can't be empty or null.");
         }
         List<Users> users = usersRepo.findByName(name);
         if (users.isEmpty()) {
@@ -69,6 +69,10 @@ public class UserServices {
 
     public List<Transactions> getUserTransactions(ObjectId userId) {
         return transactionsRepo.findByTransactionId(userId);
+    }
+
+    public List<Transactions> getTradeOfferId(ObjectId tradeOfferId) {
+        return transactionsRepo.findByTradeOfferId(tradeOfferId);
     }
 
     //This makes sure a user cannot update or create a user with invalid information.

@@ -16,5 +16,5 @@ public interface TransactionsRepo extends MongoRepository<Transactions, ObjectId
     Optional<Transactions> findByTransactionType(String transactionType);
     Optional<Transactions> findByAvailable(boolean available);
     List<Transactions> findByTransactionId(ObjectId transactionId);
-
+    List<Transactions> findByTradeOfferId(ObjectId tradeOfferId);
 }

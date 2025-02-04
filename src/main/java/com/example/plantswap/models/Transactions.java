@@ -22,11 +22,6 @@ public class Transactions {
     private List<String> tradeOfferId; // Users offering trade
     private String tradeStatus; //accept,decline or pending (pending meaning a trade offer has been made and is waiting to be accepted or declined)
 
-/*    public SellTransactions(String transactionId, String userId, String plantId) {
-        this.transactionId = transactionId;
-        this.userId = userId;
-        this.plantId = plantId;
-    }*/
 
     public Transactions(String id, String userId, String plantId, String transactionType, Integer price) {
         this.id = id;
