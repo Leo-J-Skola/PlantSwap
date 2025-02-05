@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +35,8 @@ public class TransactionServices {
         return transactionsRepo.findById(id);
     }
 
-    public List<Users> getTransactionsByUserId(String id) {
-        return usersRepo.findByTransactionId(id);
+    public List<Transactions> getTransactionsByUserId(String id) {
+        return transactionsRepo.findByUserId(id);
     }
 
     //Create a transaction by checking the transaction type (trade or sell) and that a user has a plant
@@ -55,12 +56,16 @@ public class TransactionServices {
         if (plant.getUserId() == null) {
             throw new IllegalStateException("Plant does not have an owner.");
         }
-
         validateCreateTransaction(transaction);
         transaction.setUserId(user.getId());
         transaction.setPlantId(plant.getId());
         transaction.setAvailable(true);
 
+        //To get the transactionId to update inside the user, i have to save the transaction first
+        //before i can get the id from the transaction, and before i can set it on the user
+        Transactions savedTransaction = transactionsRepo.save(transaction);
+        user.getTransactionId().add(savedTransaction.getId());
+        usersRepo.save(user);
         return transactionsRepo.save(transaction);
     }
 
@@ -119,7 +124,6 @@ public class TransactionServices {
 
     public Transactions updateTradeStatus(String transactionId, String userId, String status) {
         Transactions transaction = transactionsRepo.findById(transactionId).orElseThrow(() -> new IllegalArgumentException("Transaction not found."));
-
         if (!transaction.getUserId().equals(userId)) {
             throw new IllegalArgumentException("User is not the owner of this transaction.");
         }
@@ -129,17 +133,40 @@ public class TransactionServices {
         }
         transaction.setTradeStatus(status);
 
+        //Since all ids i need are inside different methods it is pretty convoluted
+        //I need to get the user id and plant from the owner (the user that creates the transaction listing)
+        //Then i need to get the plant id from the user that started the trade offer.
+        //(addTradeOffer method, addTradeOffer.setTradeOfferId(plantId);
+
+        //So TradeOfferId(plantId) is the plant id from the user that started the trade offer
+        //And the plantId from the transactionId is the plant of the user that created the transaction listing.
+
         if (status.equals("accept")) {
-            //This swaps plants between users, also checks if the plants exist
-            Plants offeredPlant = plantsRepo.findById(transaction.getTradeOfferId()).orElseThrow(() -> new IllegalArgumentException("Offered plant not found."));
+            Plants offeredPlant = plantsRepo.findById(transaction.getTradeOfferId()).orElseThrow(() -> new IllegalArgumentException("Trade offer plant not found."));
             Plants originalPlant = plantsRepo.findById(transaction.getPlantId()).orElseThrow(() -> new IllegalArgumentException("Original plant not found."));
 
-            String originalOwnerId = originalPlant.getUserId();
-            originalPlant.setUserId(offeredPlant.getUserId());
-            offeredPlant.setUserId(originalOwnerId);
+            Users originalOwner = usersRepo.findById(transaction.getUserId()) .orElseThrow(() -> new IllegalArgumentException("Original plant owner not found."));
+            Users offeringUser = usersRepo.findById(offeredPlant.getUserId()).orElseThrow(() -> new IllegalArgumentException("User that started trade not found."));
+
+            originalPlant.setUserId(offeringUser.getId());
+            offeredPlant.setUserId(originalOwner.getId());
+
+            List<String> originalOwnerPlants = new ArrayList<>(originalOwner.getPlantId());
+            originalOwnerPlants.remove(originalPlant.getId());
+            originalOwnerPlants.add(offeredPlant.getId());
+            originalOwner.setPlantId(originalOwnerPlants);
+
+            List<String> offeringUserPlants = new ArrayList<>(offeringUser.getPlantId());
+            offeringUserPlants.remove(offeredPlant.getId());
+            offeringUserPlants.add(originalPlant.getId());
+            offeringUser.setPlantId(offeringUserPlants);
+
+            originalOwner.getTransactionId().remove(transaction.getId());
 
             plantsRepo.save(originalPlant);
             plantsRepo.save(offeredPlant);
+            usersRepo.save(originalOwner);
+            usersRepo.save(offeringUser);
 
             transaction.setTradeStatus("Completed. Removing transaction from listings...");
             transactionsRepo.delete(transaction);
@@ -164,8 +191,9 @@ public class TransactionServices {
         Plants plant = plantsRepo.findById(transaction.getPlantId()).orElseThrow(() -> new IllegalArgumentException("Plant not found."));
 
         plant.setUserId(buyer.getId());
-        buyer.setPlantId(plant.getId());
-        seller.setPlantId(plant.getId());
+        buyer.getPlantId().add(plant.getId());
+        seller.getPlantId().remove(plant.getId());
+        seller.getTransactionId().remove(transaction.getId());
 
         plantsRepo.save(plant);
         usersRepo.save(buyer);

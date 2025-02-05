@@ -17,10 +17,11 @@ public class Transactions {
     private String transactionId;
     private String userId;
     private String plantId;
+    private String tradeOfferId; // Users offering trade
+
     private String transactionType; //This is the type of transaction, trade or sell
     private Integer price;
     private Boolean available;
-    private String tradeOfferId; // Users offering trade
     private String tradeStatus; //accept,decline or pending (pending meaning a trade offer has been made and is waiting to be accepted or declined)
 
     public Transactions(String id, String userId, String plantId, String transactionType, Integer price) {
@@ -51,6 +52,10 @@ public class Transactions {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 
     public String getPlantId() {

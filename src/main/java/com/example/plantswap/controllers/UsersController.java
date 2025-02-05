@@ -65,14 +65,6 @@ public class UsersController {
         return new ResponseEntity<>(userPlants, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/transactions")
-    public ResponseEntity<List<Transactions>> getUserTransactions(@PathVariable String id) {
-        List<Transactions> userTransactions = userServices.getUserTransactions(id);
-        if (userTransactions.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(userTransactions, HttpStatus.OK);
-    }
 }
 
 

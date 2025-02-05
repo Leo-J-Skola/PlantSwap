@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.plantswap.repo.PlantsRepo;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class UserServices {
@@ -67,14 +64,16 @@ public class UserServices {
         return plantsRepo.findByUserId(userId);
     }
 
-    public List<Transactions> getUserTransactions(String userId) {
-        return transactionsRepo.findByUserId(userId);
-    }
-
     //This makes sure a user cannot update or create a user with invalid information.
     private void validateUser(Users user) {
         if (user.getName() == null || user.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid name. It cannot be empty");
+        }
+        if (user.getTransactionId() == null || user.getTransactionId().isEmpty()) {
+            user.setTransactionId(new ArrayList<>());
+        }
+        if (user.getPlantId() == null || user.getPlantId().isEmpty()) {
+            user.setPlantId(new ArrayList<>());
         }
     }
 }

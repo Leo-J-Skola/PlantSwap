@@ -12,13 +12,13 @@ public class Users {
     private String userId;
     private String name;
     private List<String> transactionId; //all transactions the user has posted
-    private String plantId; //the plants the user owns
+    private List<String> plantId; //the plants the user owns
 
-
-    public Users(String id, String name, String plantId) {
+    public Users(String id, String name, List<String> plantId, List<String> transactionId) {
         this.id = id;
         this.name = name;
         this.plantId = plantId;
+        this.transactionId = transactionId;
     }
 
     public String getId() {
@@ -37,12 +37,20 @@ public class Users {
         this.name = name;
     }
 
-    public String getPlantId() {
+    public List<String> getPlantId() {
         return plantId;
     }
 
-    public void setPlantId(String plantId) {
+    public void setPlantId(List<String> plantId) {
         this.plantId = plantId;
+    }
+
+    public List<String> getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(List<String> transactionId) {
+        this.transactionId = transactionId;
     }
 
 }

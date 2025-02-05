@@ -13,7 +13,7 @@ public interface UsersRepo extends MongoRepository<Users, String> {
     List<Users> findByName(String name);
     Optional<Users> findById(String id);
     List<Users> findByUserId(String userId);
-    List<Users> findByTransactionId(String transactionId);
+    Optional<Users> findByTransactionId(String transactionId);
     List<Users> findByPlantId(String plantId);
 /*    Optional<Users> findByPlantId(ObjectId plantId);
     Optional<Users> findByTransactionId(ObjectId transactionId);
