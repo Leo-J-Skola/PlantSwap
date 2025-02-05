@@ -1,6 +1,5 @@
 package com.example.plantswap.controllers;
 
-import com.example.plantswap.models.Plants;
 import com.example.plantswap.models.Transactions;
 
 import com.example.plantswap.models.Users;
@@ -24,13 +23,13 @@ public class TransactionsController {
     private TransactionsRepo transactionsRepo;
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Transactions>> getTransactionsByUserId(@PathVariable ObjectId userId) {
-        List<Transactions> getTransactionsByUserId = transactionServices.getTransactionsByUserId(userId);
+    public ResponseEntity<List<Users>> getTransactionsByUserId(@PathVariable String userId) {
+        List<Users> getTransactionsByUserId = transactionServices.getTransactionsByUserId(userId);
         return new ResponseEntity<>(getTransactionsByUserId, HttpStatus.FOUND);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Transactions>> getTransactionById(@PathVariable ObjectId id) {
+    public ResponseEntity<Optional<Transactions>> getTransactionById(@PathVariable String id) {
         Optional<Transactions> getTransactionById = transactionServices.getTransactionById(id);
         return new ResponseEntity<>(getTransactionById, HttpStatus.FOUND);
     }
@@ -42,25 +41,31 @@ public class TransactionsController {
     }
 
     @PostMapping("/{userId}/{plantId}")
-    public ResponseEntity<?> createTransaction(@PathVariable ObjectId userId, @PathVariable ObjectId plantId, @RequestBody Transactions transaction) {
+    public ResponseEntity<?> createTransaction(@PathVariable String userId, @PathVariable String plantId, @RequestBody Transactions transaction) {
             Transactions newTransaction = transactionServices.createTransaction(userId, plantId, transaction);
             return ResponseEntity.ok(newTransaction);
         }
 
+    @PutMapping ("/{id}")
+    public ResponseEntity<Transactions> updateUser(@PathVariable String id, @RequestBody Transactions transactions) {
+        Transactions updatedTransaction = transactionServices.updateTransaction(id, transactions);
+        return new ResponseEntity<>(updatedTransaction, HttpStatus.ACCEPTED);
+    }
+
     @PutMapping("/{transactionId}/{plantId}/{userId}")
-    public ResponseEntity<?> addTradeOffer(@PathVariable ObjectId transactionId, @PathVariable ObjectId plantId, @PathVariable ObjectId userId) {
+    public ResponseEntity<?> addTradeOffer(@PathVariable String transactionId, @PathVariable String plantId, @PathVariable String userId) {
         Transactions updatedTransaction = transactionServices.addTradeOffer(transactionId, plantId, userId);
         return ResponseEntity.ok(updatedTransaction);
     }
 
     @PutMapping("/{transactionId}/{userId}/status")
-    public ResponseEntity<?> updateTradeStatus(@PathVariable ObjectId transactionId, @PathVariable ObjectId userId, @RequestParam String status) {
+    public ResponseEntity<?> updateTradeStatus(@PathVariable String transactionId, @PathVariable String userId, @RequestParam String status) {
         Transactions updatedTransaction = transactionServices.updateTradeStatus(transactionId, userId, status);
         return ResponseEntity.ok(updatedTransaction);
     }
 
     @PutMapping("/buy/{transactionId}/{buyerUserId}")
-    public ResponseEntity<?> buyTransaction(@PathVariable ObjectId transactionId, @PathVariable ObjectId buyerUserId, @RequestParam int buyerPrice) {
+    public ResponseEntity<?> buyTransaction(@PathVariable String transactionId, @PathVariable String buyerUserId, @RequestParam int buyerPrice) {
         Transactions updatedTransaction = transactionServices.buyTransaction(transactionId, buyerUserId, buyerPrice);
         return ResponseEntity.ok(updatedTransaction);
     }

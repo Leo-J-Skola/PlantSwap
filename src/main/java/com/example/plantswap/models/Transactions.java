@@ -5,7 +5,9 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Document(collection = "transactions")
@@ -18,9 +20,8 @@ public class Transactions {
     private String transactionType; //This is the type of transaction, trade or sell
     private Integer price;
     private Boolean available;
-    private List<String> tradeOfferId; // Users offering trade
+    private String tradeOfferId; // Users offering trade
     private String tradeStatus; //accept,decline or pending (pending meaning a trade offer has been made and is waiting to be accepted or declined)
-
 
     public Transactions(String id, String userId, String plantId, String transactionType, Integer price) {
         this.id = id;
@@ -29,7 +30,6 @@ public class Transactions {
         this.transactionType = transactionType;
         this.price = price;
         this.available = true;
-        this.tradeOfferId = List.of();
         this.tradeStatus = "pending";
     }
 
@@ -83,10 +83,11 @@ public class Transactions {
         this.price = price;
     }
 
-    public List<String> getTradeOfferId() {
+    public String getTradeOfferId() {
         return tradeOfferId;
     }
-    public void setTradeOfferId(List<String> tradeOfferId) {
+
+    public void setTradeOfferId(String tradeOfferId) {
         this.tradeOfferId = tradeOfferId;
     }
 

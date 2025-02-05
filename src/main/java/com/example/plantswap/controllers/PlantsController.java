@@ -1,7 +1,5 @@
 package com.example.plantswap.controllers;
 
-import com.example.plantswap.models.Users;
-import com.example.plantswap.repo.PlantsRepo;
 import com.example.plantswap.models.Plants;
 import com.example.plantswap.services.PlantServices;
 
@@ -10,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.data.annotation.Id;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +30,9 @@ public class PlantsController {
         plantServices.deletePlant(id);
         return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     }
-
+    //Right now basically anyone can edit anyone elses plant info. I really dont have time to fix this atm
     @PutMapping ("/{id}")
-    public ResponseEntity<Plants> updatePlant(@PathVariable ObjectId id, @RequestBody Plants plant) {
+    public ResponseEntity<Plants> updatePlant(@PathVariable String id, @RequestBody Plants plant) {
         Plants updatedPlant = plantServices.updatePlant(id, plant);
         return new ResponseEntity<>(updatedPlant, HttpStatus.ACCEPTED);
     }
@@ -47,7 +44,7 @@ public class PlantsController {
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<Optional<Plants>> getPlantById(@PathVariable ObjectId id) {
+    public ResponseEntity<Optional<Plants>> getPlantById(@PathVariable String id) {
         Optional<Plants> getPlantById = plantServices.getPlantById(id);
         return new ResponseEntity<>(getPlantById, HttpStatus.FOUND);
     }

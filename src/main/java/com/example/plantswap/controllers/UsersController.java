@@ -3,7 +3,7 @@ package com.example.plantswap.controllers;
 import com.example.plantswap.models.Plants;
 import com.example.plantswap.models.Transactions;
 import com.example.plantswap.models.Users;
-import com.example.plantswap.services.PlantServices;
+import com.example.plantswap.repo.PlantsRepo;
 import com.example.plantswap.services.UserServices;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,11 @@ public class UsersController {
 
     @Autowired
     private UserServices userServices;
+    @Autowired
+    private UserServices plantServices;
+
+    @Autowired
+    private PlantsRepo plantsRepo;
 
     @PostMapping
     public ResponseEntity<Users> createUser(@RequestBody Users user) {
@@ -32,9 +37,9 @@ public class UsersController {
         userServices.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     }
-
+    //Right now basically anyone can edit anyone elses user info. I really dont have time to fix this atm
     @PutMapping ("/{id}")
-    public ResponseEntity<Users> updateUser(@PathVariable ObjectId id, @RequestBody Users user) {
+    public ResponseEntity<Users> updateUser(@PathVariable String id, @RequestBody Users user) {
         Users updatedUser = userServices.updateUser(id, user);
         return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
     }
@@ -52,15 +57,21 @@ public class UsersController {
     }
 
     @GetMapping("/{id}/plants")
-    public ResponseEntity<List<Plants>> getUserPlants(@PathVariable ObjectId id) {
-        List<Plants> getUserPlants = userServices.getUserPlants(id);
-        return new ResponseEntity<>(getUserPlants, HttpStatus.FOUND);
+    public ResponseEntity<List<Plants>> getUserPlants(@PathVariable String id) {
+        List<Plants> userPlants = userServices.getUserPlants(id);
+        if (userPlants.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userPlants, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/transactions")
-    public ResponseEntity<List<Transactions>> getUserTransactions(@PathVariable ObjectId id) {
-        List<Transactions> getUserTransactions = userServices.getUserTransactions(id);
-        return new ResponseEntity<>(getUserTransactions, HttpStatus.FOUND);
+    public ResponseEntity<List<Transactions>> getUserTransactions(@PathVariable String id) {
+        List<Transactions> userTransactions = userServices.getUserTransactions(id);
+        if (userTransactions.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userTransactions, HttpStatus.OK);
     }
 }
 

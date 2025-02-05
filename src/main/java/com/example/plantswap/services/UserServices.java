@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import com.example.plantswap.repo.PlantsRepo;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserServices {
@@ -37,7 +37,7 @@ public class UserServices {
         usersRepo.delete(user);
     }
 
-    public Users updateUser(ObjectId id, Users user) {
+    public Users updateUser(String id, Users user) {
         validateUser(user);                                             //Gets the user id from the url (http://localhost:8080/users/{id})
         Optional<Users> existingUser = usersRepo.findById(id);          //so you dont have to add "id:" "" with the correct id
         if (existingUser.isEmpty()) {                                   //makes it so you cant accidentally create a new user
@@ -63,16 +63,12 @@ public class UserServices {
         return users;
     }
 
-    public List<Plants> getUserPlants(ObjectId userId) {
+    public List<Plants> getUserPlants(String userId) {
         return plantsRepo.findByUserId(userId);
     }
 
-    public List<Transactions> getUserTransactions(ObjectId userId) {
-        return transactionsRepo.findByTransactionId(userId);
-    }
-
-    public List<Transactions> getTradeOfferId(ObjectId tradeOfferId) {
-        return transactionsRepo.findByTradeOfferId(tradeOfferId);
+    public List<Transactions> getUserTransactions(String userId) {
+        return transactionsRepo.findByUserId(userId);
     }
 
     //This makes sure a user cannot update or create a user with invalid information.

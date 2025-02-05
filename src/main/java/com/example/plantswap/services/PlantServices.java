@@ -35,7 +35,7 @@ public class PlantServices {
         return plantsRepo.findAll();
     }
 
-    public Optional<Plants> getPlantById(ObjectId id) {
+    public Optional<Plants> getPlantById(String id) {
         if (id == null) {
             throw new IllegalArgumentException("Plant id can not be empty or null.");
         }
@@ -53,7 +53,7 @@ public class PlantServices {
                     //I found .orElseThrow(() -> new NoSuchElementException
                     //from the Basic_bookshop_api project you had made
 
-    public Plants updatePlant(ObjectId id, Plants updatedPlant) {
+    public Plants updatePlant(String id, Plants updatedPlant) {
         Plants existingPlant = plantsRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Plant with id " + id + " not found"));
 
         if (updatedPlant.getName() != null && !updatedPlant.getName().trim().isEmpty()) {

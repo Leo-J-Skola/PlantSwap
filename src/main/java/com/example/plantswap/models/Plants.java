@@ -6,11 +6,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 @Document(collection = "plants")
 public class Plants {
     @Id
     private String id;
+    private String userId; //Person that owns the plant
+    private String plantId;
+    private String transactionId;
+
     private String name;
     private String scientificName;
     private double age;
@@ -20,9 +25,6 @@ public class Plants {
     private int difficulty;
     private int price;
     private List<String> images;
-    private String userId; //Person that owns the plant
-    private String plantId;
-    private String transactionId;
 
     public Plants(String id, String userId, String name) {
         this.id = id;

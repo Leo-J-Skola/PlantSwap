@@ -5,17 +5,17 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 import java.util.Optional;
-import org.bson.types.ObjectId;
-public interface PlantsRepo extends MongoRepository<Plants, ObjectId> {
-    Optional<Plants> findById(ObjectId id);
-    List<Plants> findByUserId(ObjectId userId);
 
-    Optional<Plants> findByName(String name);
-    Optional<Plants> findByScientificName(String scientificName);
-    Optional<Plants> findByType(String type);
-    Optional<Plants> findByLightReq(String lightReq);
-    Optional<Plants> findByWaterReq(String waterReq);
-    Optional<Plants> findByImages(List<String> images);
-    Optional<Plants> findByAge(double age);
+public interface PlantsRepo extends MongoRepository<Plants, String> {
+    Optional<Plants> findById(String id);
+    List<Plants> findByUserId(String userId);
+    List<Plants> findByPlantId(String plantId);
+    List<Plants> findByName(String name);
+    List<Plants> findByScientificName(String scientificName);
+    List<Plants> findByType(String type);
+    List<Plants> findByLightReq(String lightReq);
+    List<Plants> findByWaterReq(String waterReq);
+    List<Plants> findByImages(List<String> images);
+    List<Plants> findByAge(double age);
     Optional<Plants> findByDifficulty(int difficulty);
 }
