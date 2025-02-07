@@ -1,9 +1,10 @@
 Installation
 
-Get Postman from its website and install it. Or if you want to use their web version directly by going to my published documentation:
+Get Postman from its website and install it. Go to my published Postman documentation:
 https://documenter.getpostman.com/view/41470699/2sAYX6phNj
-When you are in the website, click "Run in Postman" in the top right corner.
-Import into your workspace and continue. You have now accessed my API.
+When you are in the website, click "Run in Postman" in the top right corner. Now you can press "Run in Windows"
+You will get a prompt asking if you want to open Postman. Open it and then import into your workspace and continue.
+You have now accessed my API.
 
 To try all the requests in Postman you will need to clone my github repository, which you do by going to:
 https://github.com/Leo-J-Skola/PlantSwap
